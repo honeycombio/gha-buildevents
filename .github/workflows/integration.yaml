@@ -1,0 +1,35 @@
+name: Integration
+on:
+  push:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  integration:
+    name: Integration
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+      - run: |
+          echo ::set-env name=STEP_ID::0
+          echo ::set-env name=STEP_START::$(date +%s)
+      - run: |
+          buildevents cmd $BUILD_ID $STEP_ID sleep -- sleep 5
+      - run: |
+          buildevents step $BUILD_ID $STEP_ID $STEP_START 'step 1'
+          
+      - run: |
+          echo ::set-env name=STEP_ID::1
+          echo ::set-env name=STEP_START::$(date +%s)
+      - run: |
+          buildevents cmd $BUILD_ID $STEP_ID 'sleep some more' -- sleep 2
+      - run: |
+          buildevents step $BUILD_ID $STEP_ID $STEP_START 'step 2'

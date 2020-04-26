@@ -1,0 +1,23 @@
+name: setup-buildevents
+author: Koenraad Verheyden
+description: Integrate Honeycomb's buildevents tool in your workflow
+
+inputs:
+  apikey:
+    description: API key used to communicate with the Honeycomb API.
+    required: true
+  dataset:
+    description: Honeycomb dataset to use.
+    required: true
+
+# outputs:
+
+# It should be possible to avoid having two scripts by reading some environment
+# variable 'STATE_isPost'?
+# See actions/checkout
+# - https://github.com/actions/checkout/blob/master/action.yml#L71
+# - https://github.com/actions/checkout/blob/master/src/main.ts#L40
+runs:
+  using: node12
+  main: src/index.js
+  post: src/post.js

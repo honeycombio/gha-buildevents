@@ -1,43 +1,45 @@
 # `gha-buildevents` Action
 
-![Integration](https://github.com/kvrhdn/gha-buildevents/workflows/Integration/badge.svg)
+[![Integration][ci-integration-badge]][ci-integration-link]
+
+[ci-integration-badge]: https://github.com/kvrhdn/gha-buildevents/workflows/Integration/badge.svg
+[ci-integration-link]: https://github.com/kvrhdn/gha-buildevents/actions?query=workflow%3AIntegration
 
 This GitHub Action installs and initializes [Honeycomb's buildevents tool][buildevents]. It populates the trace with metadata from the workflow and will always send a span for the entire build, even if the build failed.
 
-To learn more about buildevents and how to use it properly, checkout [honeycombio/buildevents][buildevents].
+To learn more about buildevents and how to use it, checkout [honeycombio/buildevents][buildevents].
 
 ⚠️ This action is still in development, for now use the version from the master branch `kvrhdn/gha-buildevents@master`. I plan to introduce a `v1` tag eventually.
 
 [buildevents]: https://github.com/honeycombio/buildevents
 
-## TODO
-
-- [ ] add a parameter to disable sending a span on success
-- [ ] add a parameter to customize build ID
-- [ ] provide a mechanism to provide additional fields (through the BUILDEVENT_FILE env variable)
-
 ## How to use it
 
-Run the action somewhere in the beginning of your worflow. `gha-buildevents` needs an API key to send traces to Honeycomb.
+Run the action somewhere in the beginning of your worflow.
 
 ```yaml
 - uses: kvrhdn/gha-buildevents@master
   with:
+    # Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+
+    # The Honeycomb dataset to use.
     dataset: gha-buildevents_integration
 
 ... the rest of your job ...
 
-  # At this to the end of your job
+  # Add this to the end of your job, this will signal the post action whether
+  # the job succeded or not.
 - run: echo ::set-env name::BUILD_SUCCESS::true
 
-  # 'buildevents build' will automatically run as a post action
+  # 'buildevents build' will automatically run as a post action.
 ```
 
 From then on `buildevents` is present on the path. `gha-buildevents` sets an environment varible `BUILD_ID` (this currently defaults to the run number). The build ID should be used with all buildevents commands to ensure the trace is continued.
 
 ```yaml
-  # Set the step ID that will be used for all cmds that are part of this step and record when the step started
+  # Record the start of the step and, for conveniance, set the step ID that will
+  # be used for all commands.
 - run: |
     echo ::set-env name=STEP_ID::0
     echo ::set-env name=STEP_START::$(date +%s)
@@ -64,13 +66,13 @@ This workflow will create the following trace in Honeycomb:
 Name      | Required | Description                                         | Type   | Default
 ----------|----------|-----------------------------------------------------|--------|--------
 `apikey`  | yes      | API key used to communicate with the Honeycomb API. | string | 
-`dataset` | no       | Honeycomb dataset to use.                           | string |
+`dataset` | yes      | Honeycomb dataset to use.                           | string |
 
 ### Outputs
 
-No outputs are set, but the following environment variables are set:
+No outputs are set (yet), but the following environment variables are set:
 
-- `BUILD_ID`: the build ID used, this defaults to the run number and should used in all invocation of `buildevents`
+- `BUILD_ID`: the build ID used, this defaults to the run number and should be used in all invocation of `buildevents`
 
 ## License
 

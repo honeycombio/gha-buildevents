@@ -46,7 +46,10 @@ function configureBuildevents(apikey, dataset) {
 
   const variables = logfmt.stringify({
     'github.workflow': getEnv('GITHUB_WORKFLOW'),
+    'github.run_id': getEnv('GITHUB_RUN_ID'),
     'github.run_number': getEnv('GITHUB_RUN_NUMBER'),
+    'github.actor': getEnv('GITHUB_ACTOR'),
+    'github.repository': getEnv('GITHUB_REPOSITORY'),
     'github.event_name': getEnv('GITHUB_EVENT_NAME'),
     'github.sha': getEnv('GITHUB_SHA'),
     'github.ref': getEnv('GITHUB_REF'),

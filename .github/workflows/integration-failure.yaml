@@ -1,0 +1,23 @@
+name: Integration Failure
+on:
+  push:
+
+jobs:
+  integration:
+    name: Integration Failure
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+      - run: echo ::set-env name=STEP_ID::0
+      - run: buildevents cmd $BUILD_ID $STEP_ID sleep -- sleep 1
+      - run: buildevents cmd $BUILD_ID $STEP_ID 'failing step' -- exit 1
+
+      - run: echo ::set-env name=BUILD_SUCCESS::true

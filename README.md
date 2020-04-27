@@ -12,7 +12,6 @@ To learn more about buildevents and how to use it properly, checkout [honeycombi
 
 ## TODO
 
-- [ ] send status 'failure' if the workflow failed
 - [ ] add a parameter to disable sending a span on success
 - [ ] add a parameter to customize build ID
 - [ ] provide a mechanism to provide additional fields (through the BUILDEVENT_FILE env variable)
@@ -26,22 +25,30 @@ Run the action somewhere in the beginning of your worflow. `gha-buildevents` nee
   with:
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
     dataset: gha-buildevents_integration
+
+... the rest of your job ...
+
+  # At this to the end of your job
+- run: echo ::set-env name::BUILD_SUCCESS::true
+
+  # 'buildevents build' will automatically run as a post action
 ```
 
 From then on `buildevents` is present on the path. `gha-buildevents` sets an environment varible `BUILD_ID` (this currently defaults to the run number). The build ID should be used with all buildevents commands to ensure the trace is continued.
 
 ```yaml
-  # Set some variables that will be used for all cmds that are part of this step
+  # Set the step ID that will be used for all cmds that are part of this step and record when the step started
 - run: |
     echo ::set-env name=STEP_ID::0
     echo ::set-env name=STEP_START::$(date +%s)
 
+  # Wrap the commands that should be traced with 'buildevents cmd'
 - run: |
     buildevents cmd $BUILD_ID $STEP_ID sleep-5 -- sleep 5
 
-  # Wrap up this step, note it is not needed to call `buildevens build` this will happen in a post-action
+  # Wrap up the step
 - run: |
-    buildevents step $BUILD_ID $STEP_ID $STEP_START sleep-5
+    buildevents step $BUILD_ID $STEP_ID $STEP_START 'step 1'
 ```
 
 ## Example
@@ -61,9 +68,9 @@ Name      | Required | Description                                         | Typ
 
 ### Outputs
 
-Name | Description | Type
------|-------------|-----
-     |             |
+No outputs are set, but the following environment variables are set:
+
+- `BUILD_ID`: the build ID used, this defaults to the run number and should used in all invocation of `buildevents`
 
 ## License
 

@@ -2,10 +2,12 @@ const fs = require('fs');
 const core = require('@actions/core');
 const exec = require('@actions/exec');
 const logfmt = require('logfmt');
+const util = require('./util.js');
 
 async function run() {
   try {
-    setEnv('BUILD_START', getTimestamp());
+    const buildStart = util.getTimestamp();
+    core.saveState('buildStart', buildStart.toString());
 
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey);
@@ -15,7 +17,7 @@ async function run() {
 
     configureBuildevents(apikey, dataset);
 
-    setEnv('BUILD_ID', getEnv('GITHUB_RUN_NUMBER'));
+    util.setEnv('BUILD_ID', util.getEnv('GITHUB_RUN_NUMBER'));
 
     console.log('Init done! buildevents is now available on the path.');
 
@@ -40,35 +42,23 @@ async function installBuildevents() {
 
 function configureBuildevents(apikey, dataset) {
   // environment variables used by buildevents
-  setEnv('BUILDEVENT_APIKEY', apikey);
-  setEnv('BUILDEVENT_DATASET', dataset);
-  setEnv('BUILDEVENT_CIPROVIDER', 'github-actions');
+  util.setEnv('BUILDEVENT_APIKEY', apikey);
+  util.setEnv('BUILDEVENT_DATASET', dataset);
+  util.setEnv('BUILDEVENT_CIPROVIDER', 'github-actions');
 
   const variables = logfmt.stringify({
-    'github.workflow': getEnv('GITHUB_WORKFLOW'),
-    'github.run_id': getEnv('GITHUB_RUN_ID'),
-    'github.run_number': getEnv('GITHUB_RUN_NUMBER'),
-    'github.actor': getEnv('GITHUB_ACTOR'),
-    'github.repository': getEnv('GITHUB_REPOSITORY'),
-    'github.event_name': getEnv('GITHUB_EVENT_NAME'),
-    'github.sha': getEnv('GITHUB_SHA'),
-    'github.ref': getEnv('GITHUB_REF'),
+    'github.workflow': util.getEnv('GITHUB_WORKFLOW'),
+    'github.run_id': util.getEnv('GITHUB_RUN_ID'),
+    'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
+    'github.actor': util.getEnv('GITHUB_ACTOR'),
+    'github.repository': util.getEnv('GITHUB_REPOSITORY'),
+    'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
+    'github.sha': util.getEnv('GITHUB_SHA'),
+    'github.ref': util.getEnv('GITHUB_REF'),
   });
   fs.writeFileSync('../buildevents.txt', variables);
 
-  setEnv('BUILDEVENT_FILE', '../buildevents.txt');
-}
-
-function getTimestamp() {
-  return Math.floor(new Date() / 1000);
-}
-
-function setEnv(name, value) {
-  core.exportVariable(`${name}`, `${value}`);
-}
-
-function getEnv(name) {
-  return process.env[name];
+  util.setEnv('BUILDEVENT_FILE', '../buildevents.txt');
 }
 
 run();

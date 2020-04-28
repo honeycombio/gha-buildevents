@@ -17,6 +17,7 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
+          job-status: ${{ job.status }}
 
       - run: |
           echo ::set-env name=STEP_ID::0
@@ -33,5 +34,3 @@ jobs:
           buildevents cmd $BUILD_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
           buildevents step $BUILD_ID $STEP_ID $STEP_START 'step 2'
-
-      - run: echo ::set-env name=BUILD_SUCCESS::true

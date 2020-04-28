@@ -5,7 +5,7 @@
 [ci-integration-badge]: https://github.com/kvrhdn/gha-buildevents/workflows/Integration/badge.svg
 [ci-integration-link]: https://github.com/kvrhdn/gha-buildevents/actions?query=workflow%3AIntegration
 
-This GitHub Action installs and initializes [Honeycomb's buildevents tool][buildevents]. It populates the trace with metadata from the workflow and will always send a span for the entire build, even if the build failed.
+This GitHub Action installs and initializes [Honeycomb's buildevents tool][buildevents]. It populates the trace with metadata from the workflow and will always send a trace for the entire build, even if the build failed.
 
 To learn more about buildevents and how to use it, checkout [honeycombio/buildevents][buildevents].
 
@@ -15,22 +15,22 @@ To learn more about buildevents and how to use it, checkout [honeycombio/buildev
 
 ## How to use it
 
-Run the action somewhere in the beginning of your worflow.
+Run the action somewhere in the beginning of your worflow:
 
 ```yaml
 - uses: kvrhdn/gha-buildevents@master
   with:
-    # Honeycomb API key - needed to send traces.
+    # Required: Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
 
-    # The Honeycomb dataset to use.
+    # Required: the Honeycomb dataset to use.
     dataset: gha-buildevents_integration
 
-... the rest of your job ...
+    # Required: the job status, this will be used in the post section and sent
+    # as status of the trace.
+    job-status: ${{ job.status }}
 
-  # Add this to the end of your job, this will signal the post action whether
-  # the job succeded or not.
-- run: echo ::set-env name::BUILD_SUCCESS::true
+... the rest of your job ...
 
   # 'buildevents build' will automatically run as a post action.
 ```
@@ -53,6 +53,8 @@ From then on `buildevents` is present on the path. `gha-buildevents` sets an env
     buildevents step $BUILD_ID $STEP_ID $STEP_START 'step 1'
 ```
 
+`gha-buildevents` is a _wrapping action_. This means it has a post section which will run at the end of the build, after all other steps. In this final step the trace is finalized using `buildevents build`. Since this step runs always, even if the job failed, you don't have to worry about traces not being sent.
+
 ## Example
 
 This repository has its own workflow which will run every 15 minutes. See [.github/workflows/integration.yaml](./.github/workflows/integration.yaml).
@@ -63,10 +65,11 @@ This workflow will create the following trace in Honeycomb:
 
 ### Inputs
 
-Name      | Required | Description                                         | Type   | Default
-----------|----------|-----------------------------------------------------|--------|--------
-`apikey`  | yes      | API key used to communicate with the Honeycomb API. | string | 
-`dataset` | yes      | Honeycomb dataset to use.                           | string |
+Name         | Required | Description                                          | Type   | Default
+-------------|----------|------------------------------------------------------|--------|--------
+`apikey`     | yes      | API key used to communicate with the Honeycomb API.  | string | 
+`dataset`    | yes      | Honeycomb dataset to use.                            | string |
+`job-status` | yes      | The job status, must be set to `${{ job.status }}`.  | string |
 
 ### Outputs
 

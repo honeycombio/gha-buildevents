@@ -9,6 +9,9 @@ inputs:
   dataset:
     description: Honeycomb dataset to use.
     required: true
+  job-status:
+    description: The job status.
+    required: true
 
 # outputs:
 

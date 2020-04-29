@@ -27,7 +27,7 @@ Run the action somewhere in the beginning of your worflow:
     dataset: gha-buildevents_integration
 
     # Required: the job status, this will be used in the post section and sent
-    # as status of the trace.
+    # as status of the trace. Must always be ${{ job.status }}.
     job-status: ${{ job.status }}
 
 ... the rest of your job ...

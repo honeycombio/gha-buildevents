@@ -1,6 +1,10 @@
-name: setup-buildevents
+name: gha-buildevents
 author: Koenraad Verheyden
 description: Integrate Honeycomb's buildevents tool in your workflow
+
+branding:
+  icon: activity
+  color: yellow
 
 inputs:
   apikey:

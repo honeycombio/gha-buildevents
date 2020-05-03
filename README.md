@@ -35,7 +35,7 @@ Run the action somewhere in the beginning of your worflow:
   # 'buildevents build' will automatically run as a post action.
 ```
 
-From then on `buildevents` is present on the path. `gha-buildevents` sets an environment varible `BUILD_ID` (this currently defaults to the run number). The build ID should be used with all buildevents commands to ensure the trace is continued.
+From then on `buildevents` is present on the path. `gha-buildevents` sets an environment varible `TRACE_ID` (this currently defaults to the run number). The build ID should be used with all buildevents commands to ensure the trace is continued.
 
 ```yaml
   # Record the start of the step and, for conveniance, set the step ID that will
@@ -46,11 +46,11 @@ From then on `buildevents` is present on the path. `gha-buildevents` sets an env
 
   # Wrap the commands that should be traced with 'buildevents cmd'
 - run: |
-    buildevents cmd $BUILD_ID $STEP_ID sleep-5 -- sleep 5
+    buildevents cmd $TRACE_ID $STEP_ID sleep-5 -- sleep 5
 
   # Wrap up the step
 - run: |
-    buildevents step $BUILD_ID $STEP_ID $STEP_START 'step 1'
+    buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
 ```
 
 `gha-buildevents` is a _wrapping action_. This means it has a post section which will run at the end of the build, after all other steps. In this final step the trace is finalized using `buildevents build`. Since this step runs always, even if the job failed, you don't have to worry about traces not being sent.
@@ -75,7 +75,7 @@ Name         | Required | Description                                          |
 
 No outputs are set (yet), but the following environment variables are set:
 
-- `BUILD_ID`: the build ID used, this defaults to the run number and should be used in all invocation of `buildevents`
+- `TRACE_ID`: the trace ID, this defaults to the run number and should be used in all invocation of `buildevents`
 
 ## License
 

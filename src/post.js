@@ -6,7 +6,7 @@ async function runPost() {
   try {
     const postStart = util.getTimestamp();
 
-    const buildId = util.getEnv('BUILD_ID');
+    const traceId = util.getEnv('TRACE_ID');
     const buildStart = core.getState('buildStart');
 
     const jobStatus = core.getInput('job-status', { required: true });
@@ -24,8 +24,8 @@ async function runPost() {
       'job.status': jobStatus,
     });
 
-    await buildevents.step(buildId, 1001, postStart, 'post');
-    await buildevents.build(buildId, buildStart, result);
+    await buildevents.step(traceId, util.randomInt(2 ** 32), postStart, 'gha-buildevents_post');
+    await buildevents.build(traceId, buildStart, result);
 
   } catch (error) {
     core.setFailed(error.message);

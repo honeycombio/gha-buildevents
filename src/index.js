@@ -5,12 +5,10 @@ const util = require('./util.js');
 async function run() {
   try {
     const buildStart = util.getTimestamp();
-    const buildId = util.getEnv('GITHUB_RUN_NUMBER');
+    const traceId = util.getEnv('GITHUB_RUN_NUMBER');
 
     // save buildStart to be used in the post section
     core.saveState('buildStart', buildStart.toString());
-    // set BUILD_ID to be used throughout the workflow
-    util.setEnv('BUILD_ID', buildId);
 
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey);
@@ -18,7 +16,11 @@ async function run() {
 
     await buildevents.install(apikey, dataset);
 
-    await buildevents.step(buildId, 1000, buildStart, 'init');
+    // create a first step to time installation of buildevents
+    await buildevents.step(traceId, util.randomInt(2 ** 32), buildStart, 'gha-buildevents_init');
+
+    // set TRACE_ID to be used throughout the workflow
+    util.setEnv('TRACE_ID', traceId);
 
     console.log('Init done! buildevents is now available on the path.');
 

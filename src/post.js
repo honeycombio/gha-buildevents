@@ -10,7 +10,7 @@ async function runPost() {
     const buildStart = core.getState('buildStart');
 
     const jobStatus = core.getInput('job-status', { required: true });
-    const result = jobStatus == 'Success' ? 'success' : 'failure';
+    const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
 
     buildevents.addFields({
       'github.workflow': util.getEnv('GITHUB_WORKFLOW'),

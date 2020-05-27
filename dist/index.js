@@ -40,362 +40,6 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(429);
-/******/ 	};
-/******/
-/******/ 	// run startup
-/******/ 	return startup();
-/******/ })
-/************************************************************************/
-/******/ ({
-
-/***/ 87:
-/***/ (function(module) {
-
-module.exports = require("os");
-
-/***/ }),
-
-/***/ 129:
-/***/ (function(module) {
-
-module.exports = require("child_process");
-
-/***/ }),
-
-/***/ 304:
-/***/ (function(module) {
-
-module.exports = require("string_decoder");
-
-/***/ }),
-
-/***/ 357:
-/***/ (function(module) {
-
-module.exports = require("assert");
-
-/***/ }),
-
-/***/ 413:
-/***/ (function(module) {
-
-module.exports = require("stream");
-
-/***/ }),
-
-/***/ 429:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-module.exports =
-/******/ (function(modules, runtime) { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete installedModules[moduleId];
-/******/ 		}
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	__webpack_require__.ab = __dirname + "/";
-/******/
-/******/ 	// the startup function
-/******/ 	function startup() {
-/******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(429);
-/******/ 	};
-/******/
-/******/ 	// run startup
-/******/ 	return startup();
-/******/ })
-/************************************************************************/
-/******/ ({
-
-/***/ 87:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(87);
-
-/***/ }),
-
-/***/ 129:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(129);
-
-/***/ }),
-
-/***/ 304:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(304);
-
-/***/ }),
-
-/***/ 357:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(357);
-
-/***/ }),
-
-/***/ 413:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(413);
-
-/***/ }),
-
-/***/ 429:
-/***/ (function(module, __unusedexports, __nested_webpack_require_2025__) {
-
-module.exports =
-/******/ (function(modules, runtime) { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete installedModules[moduleId];
-/******/ 		}
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	__webpack_require__.ab = __dirname + "/";
-/******/
-/******/ 	// the startup function
-/******/ 	function startup() {
-/******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(429);
-/******/ 	};
-/******/
-/******/ 	// run startup
-/******/ 	return startup();
-/******/ })
-/************************************************************************/
-/******/ ({
-
-/***/ 87:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(87);
-
-/***/ }),
-
-/***/ 129:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(129);
-
-/***/ }),
-
-/***/ 304:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(304);
-
-/***/ }),
-
-/***/ 357:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(357);
-
-/***/ }),
-
-/***/ 413:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(413);
-
-/***/ }),
-
-/***/ 429:
-/***/ (function(module, __unusedexports, __nested_webpack_require_2025__) {
-
-module.exports =
-/******/ (function(modules, runtime) { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete installedModules[moduleId];
-/******/ 		}
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	__webpack_require__.ab = __dirname + "/";
-/******/
-/******/ 	// the startup function
-/******/ 	function startup() {
-/******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(429);
-/******/ 	};
-/******/
-/******/ 	// run startup
-/******/ 	return startup();
-/******/ })
-/************************************************************************/
-/******/ ({
-
-/***/ 87:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(87);
-
-/***/ }),
-
-/***/ 129:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(129);
-
-/***/ }),
-
-/***/ 304:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(304);
-
-/***/ }),
-
-/***/ 357:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(357);
-
-/***/ }),
-
-/***/ 413:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(413);
-
-/***/ }),
-
-/***/ 429:
-/***/ (function(module, __unusedexports, __nested_webpack_require_2025__) {
-
-module.exports =
-/******/ (function(modules, runtime) { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete installedModules[moduleId];
-/******/ 		}
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	__webpack_require__.ab = __dirname + "/";
-/******/
-/******/ 	// the startup function
-/******/ 	function startup() {
-/******/ 		// Load entry module and return exports
 /******/ 		return __webpack_require__(526);
 /******/ 	};
 /******/
@@ -406,7 +50,7 @@ module.exports =
 /******/ ({
 
 /***/ 1:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_1583__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -420,10 +64,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const childProcess = __nested_webpack_require_1583__(129);
-const path = __nested_webpack_require_1583__(622);
-const util_1 = __nested_webpack_require_1583__(669);
-const ioUtil = __nested_webpack_require_1583__(672);
+const childProcess = __webpack_require__(129);
+const path = __webpack_require__(622);
+const util_1 = __webpack_require__(669);
+const ioUtil = __webpack_require__(672);
 const exec = util_1.promisify(childProcess.exec);
 /**
  * Copies a file or folder.
@@ -703,7 +347,7 @@ function copyFile(srcFile, destFile, force) {
 /***/ }),
 
 /***/ 9:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_13217__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -717,12 +361,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const os = __nested_webpack_require_13217__(87);
-const events = __nested_webpack_require_13217__(614);
-const child = __nested_webpack_require_13217__(129);
-const path = __nested_webpack_require_13217__(622);
-const io = __nested_webpack_require_13217__(1);
-const ioUtil = __nested_webpack_require_13217__(672);
+const os = __webpack_require__(87);
+const events = __webpack_require__(614);
+const child = __webpack_require__(129);
+const path = __webpack_require__(622);
+const io = __webpack_require__(1);
+const ioUtil = __webpack_require__(672);
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
 /*
@@ -1378,18 +1022,18 @@ exports.parse = function(line) {
 /***/ 87:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(87);
+module.exports = require("os");
 
 /***/ }),
 
 /***/ 95:
-/***/ (function(module, exports, __nested_webpack_require_38898__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-var split = __nested_webpack_require_38898__(718);
-var through = __nested_webpack_require_38898__(400);
-var Readable = __nested_webpack_require_38898__(413).Readable;
-var PassThrough = __nested_webpack_require_38898__(413).PassThrough;
-var logfmt   = __nested_webpack_require_38898__(434);
+var split = __webpack_require__(718);
+var through = __webpack_require__(400);
+var Readable = __webpack_require__(413).Readable;
+var PassThrough = __webpack_require__(413).PassThrough;
+var logfmt   = __webpack_require__(434);
 
 exports = module.exports = function(options){
   if(options == null) options = {};
@@ -1418,34 +1062,50 @@ exports = module.exports = function(options){
 /***/ 129:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(129);
+module.exports = require("child_process");
 
 /***/ }),
 
 /***/ 304:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(304);
+module.exports = require("string_decoder");
 
 /***/ }),
 
 /***/ 345:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_39913__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.randomInt = exports.getTimestamp = exports.setEnv = exports.getEnv = void 0;
-const core_1 = __importDefault(__nested_webpack_require_39913__(470));
+const core = __importStar(__webpack_require__(470));
 function getEnv(name) {
     return process.env[name];
 }
 exports.getEnv = getEnv;
 function setEnv(name, value) {
-    core_1.default.exportVariable(name, value);
+    core.exportVariable(name, value);
 }
 exports.setEnv = setEnv;
 function getTimestamp() {
@@ -1463,14 +1123,14 @@ exports.randomInt = randomInt;
 /***/ 357:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(357);
+module.exports = require("assert");
 
 /***/ }),
 
 /***/ 400:
-/***/ (function(module, exports, __nested_webpack_require_40847__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-var Stream = __nested_webpack_require_40847__(413)
+var Stream = __webpack_require__(413)
 
 // through
 //
@@ -1585,12 +1245,12 @@ function through (write, end, opts) {
 /***/ 413:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(413);
+module.exports = require("stream");
 
 /***/ }),
 
 /***/ 431:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_43648__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -1602,7 +1262,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const os = __importStar(__nested_webpack_require_43648__(87));
+const os = __importStar(__webpack_require__(87));
 /**
  * Commands
  *
@@ -1675,20 +1335,20 @@ function escapeProperty(s) {
 /***/ }),
 
 /***/ 434:
-/***/ (function(module, __unusedexports, __nested_webpack_require_46095__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 //constructor
 function logfmt() {
 }
 module.exports = logfmt;
 
-var streaming        = __nested_webpack_require_46095__(962);
-var bodyParser       = __nested_webpack_require_46095__(771);
-var bodyParserStream = __nested_webpack_require_46095__(95);
-var logfmtParser     = __nested_webpack_require_46095__(63);
-var logger           = __nested_webpack_require_46095__(920);
-var requestLogger    = __nested_webpack_require_46095__(812);
-var serializer       = __nested_webpack_require_46095__(641);
+var streaming        = __webpack_require__(962);
+var bodyParser       = __webpack_require__(771);
+var bodyParserStream = __webpack_require__(95);
+var logfmtParser     = __webpack_require__(63);
+var logger           = __webpack_require__(920);
+var requestLogger    = __webpack_require__(812);
+var serializer       = __webpack_require__(641);
 
 //Build up logfmt prototype
 Object.assign(logfmt.prototype, logger);
@@ -1723,7 +1383,7 @@ Object.assign(logfmt, logfmt.prototype);
 /***/ }),
 
 /***/ 470:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_47496__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -1744,9 +1404,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const command_1 = __nested_webpack_require_47496__(431);
-const os = __importStar(__nested_webpack_require_47496__(87));
-const path = __importStar(__nested_webpack_require_47496__(622));
+const command_1 = __webpack_require__(431);
+const os = __importStar(__webpack_require__(87));
+const path = __importStar(__webpack_require__(622));
 /**
  * The code to exit an action
  */
@@ -1939,7 +1599,7 @@ exports.getState = getState;
 /***/ }),
 
 /***/ 526:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_53962__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -1972,9 +1632,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core = __importStar(__nested_webpack_require_53962__(470));
-const buildevents = __importStar(__nested_webpack_require_53962__(739));
-const util = __importStar(__nested_webpack_require_53962__(345));
+const core = __importStar(__webpack_require__(470));
+const buildevents = __importStar(__webpack_require__(739));
+const util = __importStar(__webpack_require__(345));
 function run() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -1992,13 +1652,48 @@ function run() {
             // set TRACE_ID to be used throughout the workflow
             util.setEnv('TRACE_ID', traceId);
             console.log('Init done! buildevents is now available on the path.');
+            core.saveState('isPost', 'true');
         }
         catch (error) {
             core.setFailed(error.message);
         }
     });
 }
-run();
+function runPost() {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const postStart = util.getTimestamp();
+            const traceId = (_a = util.getEnv('TRACE_ID')) !== null && _a !== void 0 ? _a : '0';
+            const buildStart = core.getState('buildStart');
+            const jobStatus = core.getInput('job-status', { required: true });
+            const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
+            buildevents.addFields({
+                'github.workflow': util.getEnv('GITHUB_WORKFLOW'),
+                'github.run_id': util.getEnv('GITHUB_RUN_ID'),
+                'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
+                'github.actor': util.getEnv('GITHUB_ACTOR'),
+                'github.repository': util.getEnv('GITHUB_REPOSITORY'),
+                'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
+                'github.sha': util.getEnv('GITHUB_SHA'),
+                'github.ref': util.getEnv('GITHUB_REF'),
+                'job.status': jobStatus
+            });
+            yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), postStart.toString(), 'gha-buildevents_post');
+            yield buildevents.build(traceId, buildStart, result);
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
+}
+const isPost = !!core.getState('isPost');
+if (!isPost) {
+    run();
+}
+else {
+    runPost();
+}
 
 
 /***/ }),
@@ -2006,14 +1701,14 @@ run();
 /***/ 614:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(614);
+module.exports = require("events");
 
 /***/ }),
 
 /***/ 622:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(622);
+module.exports = require("path");
 
 /***/ }),
 
@@ -2053,12 +1748,12 @@ exports.stringify = function(data){
 /***/ 669:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(669);
+module.exports = require("util");
 
 /***/ }),
 
 /***/ 672:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_57917__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -2073,9 +1768,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const assert_1 = __nested_webpack_require_57917__(357);
-const fs = __nested_webpack_require_57917__(747);
-const path = __nested_webpack_require_57917__(622);
+const assert_1 = __webpack_require__(357);
+const fs = __webpack_require__(747);
+const path = __webpack_require__(622);
 _a = fs.promises, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 exports.IS_WINDOWS = process.platform === 'win32';
 function exists(fsPath) {
@@ -2260,7 +1955,7 @@ function isUnixExecutable(stats) {
 /***/ }),
 
 /***/ 718:
-/***/ (function(module, __unusedexports, __nested_webpack_require_65594__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 //filter will reemit the data if cb(err,pass) pass is truthy
 
@@ -2269,8 +1964,8 @@ function isUnixExecutable(stats) {
 // the most basic reduce just emits one 'data' event after it has recieved 'end'
 
 
-var through = __nested_webpack_require_65594__(400)
-var Decoder = __nested_webpack_require_65594__(304).StringDecoder
+var through = __webpack_require__(400)
+var Decoder = __webpack_require__(304).StringDecoder
 
 module.exports = split
 
@@ -2326,7 +2021,7 @@ function split (matcher, mapper) {
 /***/ }),
 
 /***/ 739:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_67013__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -2360,11 +2055,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildeventsExec = exports.cmd = exports.step = exports.build = exports.addFields = exports.install = void 0;
-const fs = __importStar(__nested_webpack_require_67013__(747));
-const core = __importStar(__nested_webpack_require_67013__(470));
-const exec = __importStar(__nested_webpack_require_67013__(986));
-const logfmt = __importStar(__nested_webpack_require_67013__(434));
-const util = __importStar(__nested_webpack_require_67013__(345));
+const fs = __importStar(__webpack_require__(747));
+const core = __importStar(__webpack_require__(470));
+const exec = __importStar(__webpack_require__(986));
+const logfmt = __importStar(__webpack_require__(434));
+const util = __importStar(__webpack_require__(345));
 function install(apikey, dataset) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Downloading buildevents to /usr/local/bin/buildevents');
@@ -2424,7 +2119,7 @@ exports.buildeventsExec = buildeventsExec;
 /***/ 747:
 /***/ (function(module) {
 
-module.exports = __nested_webpack_require_2025__(747);
+module.exports = require("fs");
 
 /***/ }),
 
@@ -2577,7 +2272,7 @@ exports.commonFormatter = commonFormatter;
 /***/ }),
 
 /***/ 920:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_74449__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 exports.log = function(data, stream) {
   this.stream = this.stream || process.stdout;
@@ -2596,7 +2291,7 @@ exports.log = function(data, stream) {
 }
 
 exports.time = function(label) {
-  var logfmt = __nested_webpack_require_74449__(434);
+  var logfmt = __webpack_require__(434);
   var startTime = (new Date()).getTime();
   var label  = label || 'elapsed';
   var timer  = new logfmt();
@@ -2608,7 +2303,7 @@ exports.time = function(label) {
 }
 
 exports.namespace = function(object) {
-  var logfmt = __nested_webpack_require_74449__(434);
+  var logfmt = __webpack_require__(434);
   var namespaced = new logfmt()
   var namespace  = Object.assign({}, this.defaultData, object);
   namespaced.stream = this.stream;
@@ -2641,11 +2336,11 @@ exports.error = function(err, id) {
 /***/ }),
 
 /***/ 962:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_76126__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-var split       = __nested_webpack_require_76126__(718)
-var through     = __nested_webpack_require_76126__(400);
-var PassThrough = __nested_webpack_require_76126__(413).PassThrough;
+var split       = __webpack_require__(718)
+var through     = __webpack_require__(400);
+var PassThrough = __webpack_require__(413).PassThrough;
 
 //returns a stream that splits and parses logfmt into objects
 exports.streamParser = function(options){
@@ -2695,7 +2390,7 @@ exports.streamStringify = function(options){
 /***/ }),
 
 /***/ 986:
-/***/ (function(__unusedmodule, exports, __nested_webpack_require_77589__) {
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
 
@@ -2709,7 +2404,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const tr = __nested_webpack_require_77589__(9);
+const tr = __webpack_require__(9);
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -2735,134 +2430,6 @@ function exec(commandLine, args, options) {
 }
 exports.exec = exec;
 //# sourceMappingURL=exec.js.map
-
-/***/ })
-
-/******/ });
-
-/***/ }),
-
-/***/ 614:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(614);
-
-/***/ }),
-
-/***/ 622:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(622);
-
-/***/ }),
-
-/***/ 669:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(669);
-
-/***/ }),
-
-/***/ 747:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(747);
-
-/***/ })
-
-/******/ });
-
-/***/ }),
-
-/***/ 614:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(614);
-
-/***/ }),
-
-/***/ 622:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(622);
-
-/***/ }),
-
-/***/ 669:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(669);
-
-/***/ }),
-
-/***/ 747:
-/***/ (function(module) {
-
-module.exports = __nested_webpack_require_2025__(747);
-
-/***/ })
-
-/******/ });
-
-/***/ }),
-
-/***/ 614:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(614);
-
-/***/ }),
-
-/***/ 622:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(622);
-
-/***/ }),
-
-/***/ 669:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(669);
-
-/***/ }),
-
-/***/ 747:
-/***/ (function(module) {
-
-module.exports = __webpack_require__(747);
-
-/***/ })
-
-/******/ });
-
-/***/ }),
-
-/***/ 614:
-/***/ (function(module) {
-
-module.exports = require("events");
-
-/***/ }),
-
-/***/ 622:
-/***/ (function(module) {
-
-module.exports = require("path");
-
-/***/ }),
-
-/***/ 669:
-/***/ (function(module) {
-
-module.exports = require("util");
-
-/***/ }),
-
-/***/ 747:
-/***/ (function(module) {
-
-module.exports = require("fs");
 
 /***/ })
 

@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import * as core from '@actions/core'
 
 export function getEnv(name: string): string | undefined {
   return process.env[name]

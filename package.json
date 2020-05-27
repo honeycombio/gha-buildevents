@@ -2,7 +2,7 @@
   "name": "gha-buildevents",
   "version": "1.0.0",
   "description": "GitHub Actions to integrate Honeycomb's buidlevents tool into your workflows",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
@@ -26,7 +26,8 @@
   "dependencies": {
     "@actions/core": "^1.1.1",
     "@actions/exec": "^1.0.3",
-    "@types/logfmt": "^1.2.1"
+    "@types/logfmt": "^1.2.1",
+    "logfmt": "^1.3.2"
   },
   "devDependencies": {
     "@types/node": "^14.0.5",

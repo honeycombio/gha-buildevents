@@ -2,11 +2,14 @@
   "name": "gha-buildevents",
   "version": "1.0.0",
   "description": "GitHub Actions to integrate Honeycomb's buidlevents tool into your workflows",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint index.js",
-    "package": "ncc build index.js -o dist",
-    "test": "eslint index.js && jest"
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "pack": "ncc build",
+    "all": "npm run build && npm run format && npm run lint && npm run pack"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,16 @@
   "dependencies": {
     "@actions/core": "^1.1.1",
     "@actions/exec": "^1.0.3",
-    "logfmt": "^1.3.2"
+    "@types/logfmt": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.5",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
+    "@typescript-eslint/parser": "^3.0.0",
+    "@zeit/ncc": "^0.22.3",
+    "eslint": "^7.1.0",
+    "js-yaml": "^3.13.1",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.3"
   }
 }

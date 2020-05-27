@@ -1,2 +1,7 @@
+node_modules
+
+# ignore intermediate output from tsc
+lib
+
 # the buildevents binary
 buildevents

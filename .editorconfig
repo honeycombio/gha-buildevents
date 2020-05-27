@@ -9,7 +9,7 @@ indent_style = space
 indent_size = 4
 insert_final_newline = true
 
-[*.js]
+[{*.js, *.ts, *.json}]
 indent_size = 2
 
 [{*.yaml, *.yml}]

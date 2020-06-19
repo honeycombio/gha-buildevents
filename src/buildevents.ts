@@ -5,6 +5,13 @@ import * as logfmt from 'logfmt'
 import * as util from './util'
 
 export async function install(apikey: string, dataset: string): Promise<void> {
+  core.error('Deprecation warning: branch 'master' will be removed soon.')
+  core.info('\n')
+  core.info('Alternatives:\n')
+  core.info('  - use the main branch, i.e. tfe-run@main\n')
+  core.info('  - use a tag, i.e. tfe-run@v1\n')
+  core.info('\n')
+
   console.log('Downloading buildevents to /usr/local/bin/buildevents')
 
   const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'

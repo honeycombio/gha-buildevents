@@ -9,7 +9,7 @@ This GitHub Action installs and initializes [Honeycomb's buildevents tool][build
 
 To learn more about buildevents and how to use it, checkout [honeycombio/buildevents][buildevents].
 
-⚠️ This action is still in development, for now use the version from the master branch `kvrhdn/gha-buildevents@master`. I plan to introduce a `v1` tag eventually.
+⚠️ This action is still in development, for now use the version from the main branch `kvrhdn/gha-buildevents@main`. I plan to introduce a `v1` tag eventually.
 
 [buildevents]: https://github.com/honeycombio/buildevents
 
@@ -18,7 +18,7 @@ To learn more about buildevents and how to use it, checkout [honeycombio/buildev
 Run the action somewhere in the beginning of your worflow:
 
 ```yaml
-- uses: kvrhdn/gha-buildevents@master
+- uses: kvrhdn/gha-buildevents@main
   with:
     # Required: Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}

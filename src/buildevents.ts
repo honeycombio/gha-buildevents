@@ -1,26 +1,32 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
+import * as io from '@actions/io'
+import * as tc from '@actions/tool-cache'
 import * as logfmt from 'logfmt'
 import * as util from './util'
 
 export async function install(apikey: string, dataset: string): Promise<void> {
-  console.log('Downloading buildevents to /usr/local/bin/buildevents')
+  console.log('Downloading and installing buildevents')
+
+  // TODO by always using 'latest' we can't cache the download version, insetad we should:
+  //  list the available releases of buildevents
+  //  check if it already present in the tool cache
+  //  if not, download it and cache this new version
 
   const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'
-  core.debug(`Downloading from ${url}`)
 
-  let ret = await exec.exec(`sudo curl -L -o /usr/local/bin/buildevents ${url}`)
-  if (ret != 0) {
-    throw new Error('Downloading buildevents failed')
-  }
+  const downloadPath = await tc.downloadTool(url)
 
-  core.debug('Making buildevents executable')
+  // rename downloaded binary - downloadPath is similar to a UUID by default
+  const toolPath = path.join(path.dirname(downloadPath), 'buildevents')
+  await io.mv(downloadPath, toolPath)
 
-  ret = await exec.exec('sudo chmod 755 /usr/local/bin/buildevents')
-  if (ret != 0) {
-    throw new Error('Making buildevents exectable failed')
-  }
+  await exec.exec(`chmod +x ${toolPath}`)
+
+  const cachedPath = await tc.cacheFile(toolPath, 'buildevents', 'buildevents', 'latest')
+  core.addPath(cachedPath)
 
   util.setEnv('BUILDEVENT_APIKEY', apikey)
   util.setEnv('BUILDEVENT_DATASET', dataset)

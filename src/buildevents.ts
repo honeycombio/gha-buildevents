@@ -10,23 +10,21 @@ import * as util from './util'
 export async function install(apikey: string, dataset: string): Promise<void> {
   console.log('Downloading and installing buildevents')
 
-  // TODO by always using 'latest' we can't cache the download version, insetad we should:
-  //  list the available releases of buildevents
-  //  check if it already present in the tool cache
-  //  if not, download it and cache this new version
+  // TODO since we cache 'latest', I think this means that if a new release is published we won't fetch it
 
-  const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'
+  let toolPath = tc.find('buildevents', 'latest')
+  if (!toolPath) {
+    const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'
 
-  const downloadPath = await tc.downloadTool(url)
+    const downloadPath = await tc.downloadTool(url)
+    toolPath = path.join(path.dirname(downloadPath), 'buildevents')
+    await io.mv(downloadPath, toolPath)
 
-  // rename downloaded binary - downloadPath is similar to a UUID by default
-  const toolPath = path.join(path.dirname(downloadPath), 'buildevents')
-  await io.mv(downloadPath, toolPath)
+    await exec.exec(`chmod +x ${toolPath}`)
 
-  await exec.exec(`chmod +x ${toolPath}`)
-
-  const cachedPath = await tc.cacheFile(toolPath, 'buildevents', 'buildevents', 'latest')
-  core.addPath(cachedPath)
+    toolPath = await tc.cacheDir(path.dirname(toolPath), 'buildevents', 'latest')
+  }
+  core.addPath(toolPath)
 
   util.setEnv('BUILDEVENT_APIKEY', apikey)
   util.setEnv('BUILDEVENT_DATASET', dataset)

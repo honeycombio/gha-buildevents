@@ -4,17 +4,25 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as io from '@actions/io'
 import * as tc from '@actions/tool-cache'
+import * as octokit from '@octokit/rest'
 import * as logfmt from 'logfmt'
 import * as util from './util'
 
 export async function install(apikey: string, dataset: string): Promise<void> {
-  console.log('Downloading and installing buildevents')
+  console.log('Installing buildevents')
 
-  // TODO since we cache 'latest', I think this means that if a new release is published we won't fetch it
+  console.log(process.env)
 
-  let toolPath = tc.find('buildevents', 'latest')
+  const octo = new octokit.Octokit()
+
+  let latestRelease = await octo.repos.getLatestRelease({ owner: 'honeycombio', repo: 'buildevents' })
+  let version = latestRelease.data.tag_name
+
+  let toolPath = tc.find('buildevents', version)
   if (!toolPath) {
-    const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'
+    console.log(`Downloading buildevents ${version}`)
+
+    const url = `https://github.com/honeycombio/buildevents/releases/download/${version}/buildevents-linux-amd64`
 
     const downloadPath = await tc.downloadTool(url)
     toolPath = path.join(path.dirname(downloadPath), 'buildevents')
@@ -22,7 +30,7 @@ export async function install(apikey: string, dataset: string): Promise<void> {
 
     await exec.exec(`chmod +x ${toolPath}`)
 
-    toolPath = await tc.cacheDir(path.dirname(toolPath), 'buildevents', 'latest')
+    toolPath = await tc.cacheDir(path.dirname(toolPath), 'buildevents', version)
   }
   core.addPath(toolPath)
 

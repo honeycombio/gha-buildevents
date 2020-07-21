@@ -30,13 +30,13 @@
     "logfmt": "^1.3.2"
   },
   "devDependencies": {
-    "@types/node": "^14.0.14",
-    "@typescript-eslint/eslint-plugin": "^3.4.0",
-    "@typescript-eslint/parser": "^3.4.0",
+    "@types/node": "^14.0.24",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
     "@zeit/ncc": "^0.22.3",
-    "eslint": "^7.3.1",
+    "eslint": "^7.5.0",
     "js-yaml": "^3.13.1",
     "prettier": "^2.0.5",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.7"
   }
 }

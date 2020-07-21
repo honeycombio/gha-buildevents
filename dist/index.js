@@ -5330,18 +5330,14 @@ const util = __importStar(__webpack_require__(345));
 function install(apikey, dataset) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Downloading and installing buildevents');
-        // TODO by always using 'latest' we can't cache the download version, insetad we should:
-        //  list the available releases of buildevents
-        //  check if it already present in the tool cache
-        //  if not, download it and cache this new version
         const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64';
         const downloadPath = yield tc.downloadTool(url);
         // rename downloaded binary - downloadPath is similar to a UUID by default
         const toolPath = path.join(path.dirname(downloadPath), 'buildevents');
         yield io.mv(downloadPath, toolPath);
+        // make exectuable and add to path
         yield exec.exec(`chmod +x ${toolPath}`);
-        const cachedPath = yield tc.cacheFile(toolPath, 'buildevents', 'buildevents', 'latest');
-        core.addPath(cachedPath);
+        core.addPath(toolPath);
         util.setEnv('BUILDEVENT_APIKEY', apikey);
         util.setEnv('BUILDEVENT_DATASET', dataset);
         util.setEnv('BUILDEVENT_CIPROVIDER', 'github-actions');

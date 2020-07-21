@@ -20,7 +20,7 @@ export async function install(apikey: string, dataset: string): Promise<void> {
 
   // make exectuable and add to path
   await exec.exec(`chmod +x ${toolPath}`)
-  core.addPath(toolPath)
+  core.addPath(path.dirname(toolPath))
 
   util.setEnv('BUILDEVENT_APIKEY', apikey)
   util.setEnv('BUILDEVENT_DATASET', dataset)

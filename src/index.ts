@@ -53,12 +53,14 @@ async function runPost(): Promise<void> {
       'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
       'github.actor': util.getEnv('GITHUB_ACTOR'),
       'github.repository': util.getEnv('GITHUB_REPOSITORY'),
+      'github.repository_owner': util.getEnv('GITHUB_REPOSITORY_OWNER'), // undocumented
       'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
-      'github.event_path': util.getEnv('GITHUB_EVENT_PATH'),
       'github.sha': util.getEnv('GITHUB_SHA'),
       'github.ref': util.getEnv('GITHUB_REF'),
       'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
       'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
+      'github.job': util.getEnv('GITHUB_JOB'), // undocumented
+      'runner.os': util.getEnv('RUNNER_OS'), // undocumented
       'job.status': jobStatus
     })
 

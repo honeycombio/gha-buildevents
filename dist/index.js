@@ -2098,7 +2098,6 @@ const core = __importStar(__webpack_require__(470));
 const buildevents = __importStar(__webpack_require__(739));
 const util = __importStar(__webpack_require__(345));
 function run() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core.debug('Environment variables:');
@@ -2106,7 +2105,7 @@ function run() {
                 core.debug(`- ${key} = ${process.env[key]}`);
             }
             const buildStart = util.getTimestamp();
-            const traceId = (_a = util.getEnv('GITHUB_RUN_NUMBER')) !== null && _a !== void 0 ? _a : '0';
+            const traceId = `${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`;
             // save buildStart to be used in the post section
             core.saveState('buildStart', buildStart.toString());
             const apikey = core.getInput('apikey', { required: true });

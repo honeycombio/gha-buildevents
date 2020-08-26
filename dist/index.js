@@ -2101,6 +2101,10 @@ function run() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            core.debug('Environment variables:');
+            for (const key in process.env) {
+                core.debug(`- ${key} = ${process.env[key]}`);
+            }
             const buildStart = util.getTimestamp();
             const traceId = (_a = util.getEnv('GITHUB_RUN_NUMBER')) !== null && _a !== void 0 ? _a : '0';
             // save buildStart to be used in the post section
@@ -2131,14 +2135,19 @@ function runPost() {
             const jobStatus = core.getInput('job-status', { required: true });
             const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
             buildevents.addFields({
+                // available environment variables
+                // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
                 'github.workflow': util.getEnv('GITHUB_WORKFLOW'),
                 'github.run_id': util.getEnv('GITHUB_RUN_ID'),
                 'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
                 'github.actor': util.getEnv('GITHUB_ACTOR'),
                 'github.repository': util.getEnv('GITHUB_REPOSITORY'),
                 'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
+                'github.event_path': util.getEnv('GITHUB_EVENT_PATH'),
                 'github.sha': util.getEnv('GITHUB_SHA'),
                 'github.ref': util.getEnv('GITHUB_REF'),
+                'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
+                'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
                 'job.status': jobStatus
             });
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), postStart.toString(), 'gha-buildevents_post');

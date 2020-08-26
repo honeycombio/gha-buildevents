@@ -4,6 +4,11 @@ import * as util from './util.js'
 
 async function run(): Promise<void> {
   try {
+    core.debug('Environment variables:')
+    for (const key in process.env) {
+      core.debug(`- ${key} = ${process.env[key]}`)
+    }
+
     const buildStart = util.getTimestamp()
     const traceId = util.getEnv('GITHUB_RUN_NUMBER') ?? '0'
 
@@ -41,14 +46,19 @@ async function runPost(): Promise<void> {
     const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure'
 
     buildevents.addFields({
+      // available environment variables
+      // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
       'github.workflow': util.getEnv('GITHUB_WORKFLOW'),
       'github.run_id': util.getEnv('GITHUB_RUN_ID'),
       'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
       'github.actor': util.getEnv('GITHUB_ACTOR'),
       'github.repository': util.getEnv('GITHUB_REPOSITORY'),
       'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
+      'github.event_path': util.getEnv('GITHUB_EVENT_PATH'),
       'github.sha': util.getEnv('GITHUB_SHA'),
       'github.ref': util.getEnv('GITHUB_REF'),
+      'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
+      'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
       'job.status': jobStatus
     })
 

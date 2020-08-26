@@ -1525,7 +1525,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.randomInt = exports.getTimestamp = exports.setEnv = exports.getEnv = void 0;
+exports.replaceSpaces = exports.randomInt = exports.getTimestamp = exports.setEnv = exports.getEnv = void 0;
 const core = __importStar(__webpack_require__(470));
 function getEnv(name) {
     return process.env[name];
@@ -1543,6 +1543,10 @@ function randomInt(max) {
     return Math.trunc(Math.random() * max);
 }
 exports.randomInt = randomInt;
+function replaceSpaces(str) {
+    return str.replace(/\s+/g, '_');
+}
+exports.replaceSpaces = replaceSpaces;
 
 
 /***/ }),
@@ -2105,7 +2109,7 @@ function run() {
                 core.debug(`- ${key} = ${process.env[key]}`);
             }
             const buildStart = util.getTimestamp();
-            const traceId = `${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`;
+            const traceId = util.replaceSpaces(`${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`);
             // save buildStart to be used in the post section
             core.saveState('buildStart', buildStart.toString());
             const apikey = core.getInput('apikey', { required: true });

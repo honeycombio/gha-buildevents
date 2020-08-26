@@ -10,7 +10,9 @@ async function run(): Promise<void> {
     }
 
     const buildStart = util.getTimestamp()
-    const traceId = `${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`
+    const traceId = util.replaceSpaces(
+      `${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`
+    )
 
     // save buildStart to be used in the post section
     core.saveState('buildStart', buildStart.toString())

@@ -15,3 +15,7 @@ export function getTimestamp(): number {
 export function randomInt(max: number): number {
   return Math.trunc(Math.random() * max)
 }
+
+export function replaceSpaces(str: string): string {
+  return str.replace(/\s+/g, '_')
+}

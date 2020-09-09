@@ -44,6 +44,6 @@ jobs:
           echo ::set-env name=STEP_ID::2
           echo ::set-env name=STEP_START::$(date +%s)
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID 'output matrix value' -- echo ${{ matrix.value }}
+          buildevents cmd $TRACE_ID $STEP_ID 'output matrix value ${{ matrix.value }}' -- echo ${{ matrix.value }}
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'

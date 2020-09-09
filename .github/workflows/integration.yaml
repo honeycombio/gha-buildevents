@@ -8,6 +8,10 @@ jobs:
   integration:
     name: Integration
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        value: [a, b]
 
     steps:
       - uses: actions/checkout@v2
@@ -32,5 +36,14 @@ jobs:
           echo ::set-env name=STEP_START::$(date +%s)
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
+      - run: |
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'
+          
+      - name: output matrix value (${{ matrix.value }})
+        run: |
+          echo ::set-env name=STEP_ID::2
+          echo ::set-env name=STEP_START::$(date +%s)
+      - run: |
+          buildevents cmd $TRACE_ID $STEP_ID 'output matrix value' -- echo ${{ matrix.value }}
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'

@@ -46,4 +46,4 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'output matrix value ${{ matrix.value }}' -- echo ${{ matrix.value }}
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 3'

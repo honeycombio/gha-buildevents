@@ -17,6 +17,6 @@ jobs:
           dataset: gha-buildevents_integration
           job-status: ${{ job.status }}
 
-      - run: echo ::set-env name=STEP_ID::0
+      - run: echo "STEP_ID=0" >> $GITHUB_ENV
       - run: buildevents cmd $BUILD_ID $STEP_ID sleep -- sleep 1
       - run: buildevents cmd $BUILD_ID $STEP_ID 'failing step' -- exit 1

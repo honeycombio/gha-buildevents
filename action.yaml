@@ -1,6 +1,6 @@
 name: Honeycomb Buildevents
 author: Koenraad Verheyden
-description: Add observability to your GitHub Actions workflows 
+description: Trace GitHub Action workflows with Honeycomb
 
 branding:
   icon: activity

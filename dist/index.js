@@ -2174,7 +2174,13 @@ function run() {
                 core.debug(`- ${key} = ${process.env[key]}`);
             }
             const buildStart = util.getTimestamp();
-            const traceId = util.replaceSpaces(`${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`);
+            const traceComponents = [
+                util.getEnv('GITHUB_WORKFLOW'),
+                util.getEnv('GITHUB_JOB'),
+                util.getEnv('GITHUB_RUN_NUMBER'),
+                core.getInput('matrix-key')
+            ];
+            const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'));
             // save buildStart to be used in the post section
             core.saveState('buildStart', buildStart.toString());
             const apikey = core.getInput('apikey', { required: true });
@@ -2217,6 +2223,7 @@ function runPost() {
                 'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
                 'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
                 'github.job': util.getEnv('GITHUB_JOB'),
+                'github.matrix-key': core.getInput('matrix-key'),
                 'runner.os': util.getEnv('RUNNER_OS'),
                 'job.status': jobStatus
             });

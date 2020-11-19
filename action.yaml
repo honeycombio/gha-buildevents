@@ -16,6 +16,9 @@ inputs:
   job-status:
     description: The job status.
     required: true
+  matrix-key:
+    description: Set this to a key unique for this matrix cell.
+    required: false
 
 #outputs:
 

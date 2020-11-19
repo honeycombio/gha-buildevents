@@ -10,9 +10,13 @@ async function run(): Promise<void> {
     }
 
     const buildStart = util.getTimestamp()
-    const traceId = util.replaceSpaces(
-      `${util.getEnv('GITHUB_WORKFLOW')}-${util.getEnv('GITHUB_JOB')}-${util.getEnv('GITHUB_RUN_NUMBER')}`
-    )
+    const traceComponents = [
+      util.getEnv('GITHUB_WORKFLOW'),
+      util.getEnv('GITHUB_JOB'),
+      util.getEnv('GITHUB_RUN_NUMBER'),
+      core.getInput('matrix-key')
+    ]
+    const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 
     // save buildStart to be used in the post section
     core.saveState('buildStart', buildStart.toString())
@@ -62,6 +66,7 @@ async function runPost(): Promise<void> {
       'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
       'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
       'github.job': util.getEnv('GITHUB_JOB'), // undocumented
+      'github.matrix-key': core.getInput('matrix-key'),
       'runner.os': util.getEnv('RUNNER_OS'), // undocumented
       'job.status': jobStatus
     })

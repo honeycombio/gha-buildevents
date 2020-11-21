@@ -11,31 +11,35 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ⚠️ Limitations:
 
-- this action only works on Linux hosts
-- if downloading buildevents fails or if running buildevents failed (i.e. a bug in buildevents) the entire job will fail
+- this action currently only works on Linux hosts (though technically support could be added for other platforms)
+- if downloading or executing buildevents fails, the entire job will fail
 
 [buildevents]: https://github.com/honeycombio/buildevents
 
 ## How to use it
 
-Put the action in the beginning of your worflow:
+Put the action at the start of your workflow:
 
 ```yaml
-- uses: kvrhdn/gha-buildevents@main
+- uses: kvrhdn/gha-buildevents@v1
   with:
-    # Required: Honeycomb API key - needed to send traces.
+    # Required: a Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
 
-    # Required: the Honeycomb dataset to use.
+    # Required: the Honeycomb dataset to send traces to.
     dataset: gha-buildevents_integration
 
     # Required: the job status, this will be used in the post section and sent
     # as status of the trace. Must always be ${{ job.status }}.
     job-status: ${{ job.status }}
 
-... the rest of your job ...
+    # Optional: this should only be used in combination with matrix builds. Set
+    # this to a value uniquely describing each matrix configuration.
+    matrix-key: ${{ matrix.value }}
 
-  # 'buildevents build' will automatically run as a post action.
+# ... the rest of your job ...
+
+# 'buildevents build' will automatically run as a post action.
 ```
 
 `gha-buildevents` is a _wrapping action_. This means it has a post section which will run at the end of the build, after all other steps. In this final step the trace is finalized using `buildevents build`. Since this step runs always, even if the job failed, you don't have to worry about traces not being sent.
@@ -57,7 +61,7 @@ No outputs are set, but the following environment variables are set:
 
 ## Example
 
-This repository has its own workflow which will run every 15 minutes. See [.github/workflows/integration.yaml](./.github/workflows/integration.yaml).
+This repository has its own workflow which will run every hour. See [.github/workflows/integration.yaml](./.github/workflows/integration.yaml).
 
 This workflow will create the following trace in Honeycomb:
 

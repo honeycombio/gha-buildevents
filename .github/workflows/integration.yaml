@@ -1,8 +1,9 @@
 name: Integration
 on:
   push:
+  pull_request:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "0 * * * *" # run once every hour
 
 jobs:
   integration:
@@ -12,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup buildevents
+      - name: Buildevents
         uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}

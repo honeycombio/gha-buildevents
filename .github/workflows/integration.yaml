@@ -1,7 +1,6 @@
 name: Integration
 on:
   push:
-  pull_request:
   schedule:
     - cron: "0 * * * *" # run once every hour
 

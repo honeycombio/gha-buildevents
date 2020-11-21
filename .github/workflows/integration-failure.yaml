@@ -1,7 +1,6 @@
 name: Integration Failure
 on:
   push:
-  pull_request:
 
 jobs:
   integration:

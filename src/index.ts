@@ -14,7 +14,8 @@ async function run(): Promise<void> {
       util.getEnv('GITHUB_WORKFLOW'),
       util.getEnv('GITHUB_JOB'),
       util.getEnv('GITHUB_RUN_NUMBER'),
-      core.getInput('matrix-key')
+      core.getInput('matrix-key'),
+      util.getEnv('GITHUB_RUN_ID')
     ]
     const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 

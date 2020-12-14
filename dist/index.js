@@ -2225,7 +2225,8 @@ function runPost() {
                 'github.job': util.getEnv('GITHUB_JOB'),
                 'github.matrix-key': core.getInput('matrix-key'),
                 'runner.os': util.getEnv('RUNNER_OS'),
-                'job.status': jobStatus
+                'job.status': jobStatus,
+                'meta.source': 'gha-buildevents'
             });
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), postStart.toString(), 'gha-buildevents_post');
             yield buildevents.build(traceId, buildStart, result);

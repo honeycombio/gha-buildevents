@@ -68,7 +68,8 @@ async function runPost(): Promise<void> {
       'github.job': util.getEnv('GITHUB_JOB'), // undocumented
       'github.matrix-key': core.getInput('matrix-key'),
       'runner.os': util.getEnv('RUNNER_OS'), // undocumented
-      'job.status': jobStatus
+      'job.status': jobStatus,
+      'meta.source': 'gha-buildevents'
     })
 
     await buildevents.step(traceId, util.randomInt(2 ** 32).toString(), postStart.toString(), 'gha-buildevents_post')

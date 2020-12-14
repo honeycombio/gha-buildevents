@@ -11,10 +11,12 @@ async function run(): Promise<void> {
 
     const buildStart = util.getTimestamp()
     const traceComponents = [
+      util.getEnv('GITHUB_REPOSITORY'),
       util.getEnv('GITHUB_WORKFLOW'),
       util.getEnv('GITHUB_JOB'),
       util.getEnv('GITHUB_RUN_NUMBER'),
-      core.getInput('matrix-key')
+      core.getInput('matrix-key'),
+      util.randomInt(2 ** 32).toString()
     ]
     const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 

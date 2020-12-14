@@ -5435,8 +5435,15 @@ function install(apikey, dataset) {
 }
 exports.install = install;
 function addFields(keyValueMap) {
-    fs.writeFileSync('../buildevents.txt', logfmt.stringify(keyValueMap));
-    util.setEnv('BUILDEVENT_FILE', '../buildevents.txt');
+    const envPath = util.getEnv('BUILDEVENT_FILE') || '../buildevents.txt';
+    // Add the existing values from the BUILDEVENT_FILE to the fields we write out
+    // this deliberately lets existing values - presumably from the workflow - override
+    // the defaults we set.
+    if (fs.existsSync(envPath)) {
+        Object.assign(keyValueMap, logfmt.parse(fs.readFileSync(envPath).toString()));
+    }
+    fs.writeFileSync(envPath, logfmt.stringify(keyValueMap));
+    util.setEnv('BUILDEVENT_FILE', envPath);
 }
 exports.addFields = addFields;
 function build(buildId, buildStart, result) {

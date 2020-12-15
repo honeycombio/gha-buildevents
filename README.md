@@ -59,6 +59,20 @@ No outputs are set, but the following environment variables are set:
 
 - `TRACE_ID`: the trace ID, this defaults to the run number and should be used in all invocation of `buildevents`
 
+## Good to know
+
+### Trace IDs
+
+Trace IDs follow a fixed pattern:
+
+```
+<owner>/<repo>-<workflow>-<job>-<run number>-<random number>
+```
+
+For example, a workflow run in this repository might be called `kvrhdn/gha-buildevents-Integration-smoke-test-20144-1738717406`. 
+
+This can be convenient when filtering traces, for instance to show all traces related to the the workflow `Integration` you could add a filter in the Honeycomb UI: `trace.trace_id contains Integration`.
+
 ## Example
 
 This repository has its own workflow which will run every hour. See [.github/workflows/integration.yaml](./.github/workflows/integration.yaml).
@@ -69,7 +83,7 @@ This workflow will create the following trace in Honeycomb:
 
 ## Adding additional spans
 
-After `gha-buildevents` has run, `buildevents` will be available on the path. You can use the `buildevents` exectable to add additional spans.
+After `gha-buildevents` has run, `buildevents` will be available on the path. You can use the `buildevents` executable to add additional spans.
 
 `gha-buildevents` sets an environment varible `TRACE_ID`. The trace ID should be used with all buildevents commands to ensure the trace is continued.
 

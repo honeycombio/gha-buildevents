@@ -2180,6 +2180,7 @@ function run() {
                 util.getEnv('GITHUB_JOB'),
                 util.getEnv('GITHUB_RUN_NUMBER'),
                 core.getInput('matrix-key'),
+                // append a random number to ensure traceId is unique when the workflow is re-run
                 util.randomInt(Math.pow(2, 32)).toString()
             ];
             const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'));

@@ -28,8 +28,15 @@ export async function install(apikey: string, dataset: string): Promise<void> {
 }
 
 export function addFields(keyValueMap: object): void {
-  fs.writeFileSync('../buildevents.txt', logfmt.stringify(keyValueMap))
-  util.setEnv('BUILDEVENT_FILE', '../buildevents.txt')
+  const envPath = util.getEnv('BUILDEVENT_FILE') || '../buildevents.txt'
+  // Add the existing values from the BUILDEVENT_FILE to the fields we write out
+  // this deliberately lets existing values - presumably from the workflow - override
+  // the defaults we set.
+  if (fs.existsSync(envPath)) {
+    Object.assign(keyValueMap, logfmt.parse(fs.readFileSync(envPath).toString()))
+  }
+  fs.writeFileSync(envPath, logfmt.stringify(keyValueMap))
+  util.setEnv('BUILDEVENT_FILE', envPath)
 }
 
 export async function build(buildId: string, buildStart: string, result: string): Promise<void> {

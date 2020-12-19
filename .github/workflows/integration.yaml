@@ -19,6 +19,11 @@ jobs:
           dataset: gha-buildevents_integration
           job-status: ${{ job.status }}
 
+      - name: Print contents of BUILDEVENT_FILE
+        run: |
+          echo Contents of BUILDEVENT_FILE:
+          cat $BUILDEVENT_FILE
+
       - run: |
           echo "STEP_ID=0" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV

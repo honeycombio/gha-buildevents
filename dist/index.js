@@ -2190,6 +2190,25 @@ function run() {
             core.setSecret(apikey);
             const dataset = core.getInput('dataset', { required: true });
             yield buildevents.install(apikey, dataset);
+            buildevents.addFields({
+                // available environment variables
+                // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+                'github.workflow': util.getEnv('GITHUB_WORKFLOW'),
+                'github.run_id': util.getEnv('GITHUB_RUN_ID'),
+                'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
+                'github.actor': util.getEnv('GITHUB_ACTOR'),
+                'github.repository': util.getEnv('GITHUB_REPOSITORY'),
+                'github.repository_owner': util.getEnv('GITHUB_REPOSITORY_OWNER'),
+                'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
+                'github.sha': util.getEnv('GITHUB_SHA'),
+                'github.ref': util.getEnv('GITHUB_REF'),
+                'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
+                'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
+                'github.job': util.getEnv('GITHUB_JOB'),
+                'github.matrix-key': core.getInput('matrix-key'),
+                'runner.os': util.getEnv('RUNNER_OS'),
+                'meta.source': 'gha-buildevents'
+            });
             // create a first step to time installation of buildevents
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), buildStart.toString(), 'gha-buildevents_init');
             // set TRACE_ID to be used throughout the workflow
@@ -2212,24 +2231,7 @@ function runPost() {
             const jobStatus = core.getInput('job-status', { required: true });
             const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
             buildevents.addFields({
-                // available environment variables
-                // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
-                'github.workflow': util.getEnv('GITHUB_WORKFLOW'),
-                'github.run_id': util.getEnv('GITHUB_RUN_ID'),
-                'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
-                'github.actor': util.getEnv('GITHUB_ACTOR'),
-                'github.repository': util.getEnv('GITHUB_REPOSITORY'),
-                'github.repository_owner': util.getEnv('GITHUB_REPOSITORY_OWNER'),
-                'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
-                'github.sha': util.getEnv('GITHUB_SHA'),
-                'github.ref': util.getEnv('GITHUB_REF'),
-                'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
-                'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
-                'github.job': util.getEnv('GITHUB_JOB'),
-                'github.matrix-key': core.getInput('matrix-key'),
-                'runner.os': util.getEnv('RUNNER_OS'),
-                'job.status': jobStatus,
-                'meta.source': 'gha-buildevents'
+                'job.status': jobStatus
             });
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), postStart.toString(), 'gha-buildevents_post');
             yield buildevents.build(traceId, buildStart, result);

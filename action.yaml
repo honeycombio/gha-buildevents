@@ -14,7 +14,7 @@ inputs:
     description: The Honeycomb dataset to send traces to.
     required: true
   job-status:
-    description: The job status, must always be ${{ job.status }}.
+    description: 'The job status, must always be ${{ job.status }}.'
     required: true
   matrix-key:
     description: Set this to a key unique for this matrix cell, only useful when using a build matrix.

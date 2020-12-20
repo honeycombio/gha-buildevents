@@ -2185,7 +2185,7 @@ function run() {
                 util.randomInt(Math.pow(2, 32)).toString()
             ];
             const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'));
-            core.info(`Starting a new trace ${traceId}`);
+            core.info(`Trace ID: ${traceId}`);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
             const dataset = core.getInput('dataset', { required: true });

@@ -8,9 +8,10 @@ import * as logfmt from 'logfmt'
 import * as util from './util'
 
 export async function install(apikey: string, dataset: string): Promise<void> {
-  console.log('Downloading and installing buildevents')
+  core.info('Downloading and installing buildevents')
 
   const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'
+  core.info(`Downloading from ${url}`)
 
   const downloadPath = await tc.downloadTool(url)
 
@@ -28,7 +29,13 @@ export async function install(apikey: string, dataset: string): Promise<void> {
 }
 
 export function addFields(keyValueMap: object): void {
-  const envPath = util.getEnv('BUILDEVENT_FILE') || '../buildevents.txt'
+  const BUILDEVENT_FILE = 'BUILDEVENT_FILE'
+
+  let envPath = util.getEnv(BUILDEVENT_FILE)
+  if (!envPath) {
+    envPath = '../buildevents.txt'
+    util.setEnv(BUILDEVENT_FILE, envPath)
+  }
   // Add the existing values from the BUILDEVENT_FILE to the fields we write out
   // this deliberately lets existing values - presumably from the workflow - override
   // the defaults we set.
@@ -36,7 +43,6 @@ export function addFields(keyValueMap: object): void {
     Object.assign(keyValueMap, logfmt.parse(fs.readFileSync(envPath).toString()))
   }
   fs.writeFileSync(envPath, logfmt.stringify(keyValueMap))
-  util.setEnv('BUILDEVENT_FILE', envPath)
 }
 
 export async function build(buildId: string, buildStart: string, result: string): Promise<void> {

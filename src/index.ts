@@ -4,6 +4,7 @@ import * as util from './util.js'
 
 async function run(): Promise<void> {
   try {
+    // to enable debug logging, add a secret named ACTIONS_RUNNER_DEBUG with the value 'true'
     core.debug('Environment variables:')
     for (const key in process.env) {
       core.debug(`- ${key} = ${process.env[key]}`)
@@ -21,8 +22,7 @@ async function run(): Promise<void> {
     ]
     const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 
-    // save buildStart to be used in the post section
-    core.saveState('buildStart', buildStart.toString())
+    core.info(`Trace ID: ${traceId}`)
 
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
@@ -53,11 +53,12 @@ async function run(): Promise<void> {
     // create a first step to time installation of buildevents
     await buildevents.step(traceId, util.randomInt(2 ** 32).toString(), buildStart.toString(), 'gha-buildevents_init')
 
+    core.info('Init done! buildevents is now available on the path.')
+
     // set TRACE_ID to be used throughout the workflow
     util.setEnv('TRACE_ID', traceId)
-
-    console.log('Init done! buildevents is now available on the path.')
-
+    // save buildStart to be used in the post section
+    core.saveState('buildStart', buildStart.toString())
     core.saveState('isPost', 'true')
   } catch (error) {
     core.setFailed(error.message)

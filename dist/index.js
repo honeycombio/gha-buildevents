@@ -2169,6 +2169,7 @@ const util = __importStar(__webpack_require__(345));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // to enable debug logging, add a secret named ACTIONS_RUNNER_DEBUG with the value 'true'
             core.debug('Environment variables:');
             for (const key in process.env) {
                 core.debug(`- ${key} = ${process.env[key]}`);
@@ -2184,8 +2185,7 @@ function run() {
                 util.randomInt(Math.pow(2, 32)).toString()
             ];
             const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'));
-            // save buildStart to be used in the post section
-            core.saveState('buildStart', buildStart.toString());
+            core.info(`Starting a new trace ${traceId}`);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
             const dataset = core.getInput('dataset', { required: true });
@@ -2211,9 +2211,11 @@ function run() {
             });
             // create a first step to time installation of buildevents
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), buildStart.toString(), 'gha-buildevents_init');
+            core.info('Init done! buildevents is now available on the path.');
             // set TRACE_ID to be used throughout the workflow
             util.setEnv('TRACE_ID', traceId);
-            console.log('Init done! buildevents is now available on the path.');
+            // save buildStart to be used in the post section
+            core.saveState('buildStart', buildStart.toString());
             core.saveState('isPost', 'true');
         }
         catch (error) {
@@ -5425,8 +5427,9 @@ const logfmt = __importStar(__webpack_require__(434));
 const util = __importStar(__webpack_require__(345));
 function install(apikey, dataset) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('Downloading and installing buildevents');
+        core.info('Downloading and installing buildevents');
         const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64';
+        core.info(`Downloading from ${url}`);
         const downloadPath = yield tc.downloadTool(url);
         // rename downloaded binary - downloadPath is similar to a UUID by default
         const toolPath = path.join(path.dirname(downloadPath), 'buildevents');
@@ -5441,7 +5444,12 @@ function install(apikey, dataset) {
 }
 exports.install = install;
 function addFields(keyValueMap) {
-    const envPath = util.getEnv('BUILDEVENT_FILE') || '../buildevents.txt';
+    const BUILDEVENT_FILE = 'BUILDEVENT_FILE';
+    let envPath = util.getEnv(BUILDEVENT_FILE);
+    if (!envPath) {
+        envPath = '../buildevents.txt';
+        util.setEnv(BUILDEVENT_FILE, envPath);
+    }
     // Add the existing values from the BUILDEVENT_FILE to the fields we write out
     // this deliberately lets existing values - presumably from the workflow - override
     // the defaults we set.
@@ -5449,7 +5457,6 @@ function addFields(keyValueMap) {
         Object.assign(keyValueMap, logfmt.parse(fs.readFileSync(envPath).toString()));
     }
     fs.writeFileSync(envPath, logfmt.stringify(keyValueMap));
-    util.setEnv('BUILDEVENT_FILE', envPath);
 }
 exports.addFields = addFields;
 function build(buildId, buildStart, result) {

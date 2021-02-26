@@ -33,7 +33,7 @@ export function addFields(keyValueMap: object): void {
 
   let envPath = util.getEnv(BUILDEVENT_FILE)
   if (!envPath) {
-    envPath = '../buildevents.txt'
+    envPath = path.resolve('../buildevents.txt')
     util.setEnv(BUILDEVENT_FILE, envPath)
   }
   // Add the existing values from the BUILDEVENT_FILE to the fields we write out

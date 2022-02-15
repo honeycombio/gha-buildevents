@@ -19,3 +19,34 @@ export function randomInt(max: number): number {
 export function replaceSpaces(str: string): string {
   return str.replace(/\s+/g, '_')
 }
+
+export function constructExecutableName(): string {
+  let processArch = ''
+  switch (process.arch) {
+    case 'x64':
+      processArch = 'amd64'
+      break
+    case 'x32':
+      processArch = '386'
+      break
+    case 'arm64':
+      processArch = 'arm64'
+      break
+    default:
+      throw new Error(`Unsupported arch ${process.arch}'`)
+  }
+
+  let processPlatform = ''
+  switch (process.platform) {
+    case 'darwin':
+      processPlatform = 'darwin'
+      break
+    case 'linux':
+      processPlatform = 'linux'
+      break
+    default:
+      throw new Error(`Unsupported platform ${process.platform}'`)
+  }
+
+  return 'buildevents-' + processPlatform + '-' + processArch
+}

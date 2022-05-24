@@ -3801,16 +3801,7 @@ function run() {
                 core.debug(`- ${key} = ${process.env[key]}`);
             }
             const buildStart = util.getTimestamp();
-            const traceComponents = [
-                util.getEnv('GITHUB_REPOSITORY'),
-                util.getEnv('GITHUB_WORKFLOW'),
-                util.getEnv('GITHUB_JOB'),
-                util.getEnv('GITHUB_RUN_NUMBER'),
-                core.getInput('matrix-key'),
-                // append a random number to ensure traceId is unique when the workflow is re-run
-                util.randomInt(Math.pow(2, 32)).toString()
-            ];
-            const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'));
+            const traceId = generateTraceId();
             core.info(`Trace ID: ${traceId}`);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
@@ -3875,6 +3866,25 @@ if (!isPost) {
 }
 else {
     runPost();
+}
+function generateTraceId() {
+    const TRACE_ID_BYTES = 16;
+    const SHARED_BUFFER = Buffer.allocUnsafe(TRACE_ID_BYTES);
+    for (let i = 0; i < TRACE_ID_BYTES / 4; i++) {
+        // unsigned right shift drops decimal part of the number
+        // it is required because if a number between 2**32 and 2**32 - 1 is generated, an out of range error is thrown by writeUInt32BE
+        SHARED_BUFFER.writeUInt32BE((Math.random() * Math.pow(2, 32)) >>> 0, i * 4);
+    }
+    // If buffer is all 0, set the last byte to 1 to guarantee a valid w3c id is generated
+    for (let i = 0; i < TRACE_ID_BYTES; i++) {
+        if (SHARED_BUFFER[i] > 0) {
+            break;
+        }
+        else if (i === TRACE_ID_BYTES - 1) {
+            SHARED_BUFFER[TRACE_ID_BYTES - 1] = 1;
+        }
+    }
+    return SHARED_BUFFER.toString('hex', 0, TRACE_ID_BYTES);
 }
 
 

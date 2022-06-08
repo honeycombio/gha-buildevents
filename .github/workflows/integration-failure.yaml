@@ -4,7 +4,7 @@ on:
 
 jobs:
   integration:
-    name: Integration Failure
+    name: Expected Failure
     runs-on: ubuntu-latest
 
     steps:
@@ -18,5 +18,7 @@ jobs:
           job-status: ${{ job.status }}
 
       - run: echo "STEP_ID=0" >> $GITHUB_ENV
-      - run: buildevents cmd $BUILD_ID $STEP_ID sleep -- sleep 1
-      - run: buildevents cmd $BUILD_ID $STEP_ID 'failing step' -- exit 1
+      - name: Sleepy Time
+        run: buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 1
+      - name: Expected Failure
+        run: buildevents cmd $TRACE_ID $STEP_ID 'failing step' -- exit 1

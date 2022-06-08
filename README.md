@@ -112,3 +112,7 @@ To learn more about buildevents and how to use it, checkout [honeycombio/buildev
 ## License
 
 This Action is distributed under the terms of the MIT license, see [LICENSE](./LICENSE) for details.
+
+## Contributor Alums ❤️
+
+The buildevents GitHub Action was created for the community and generously bequethed to Honeycomb by Koenraad Verheyden ([@kvrhdn](https://github.com/kvrhdn)).

@@ -20,7 +20,10 @@
     "Actions",
     "Honeycomb.io"
   ],
-  "author": "Koenraad Verheyden",
+  "author": {
+      "name": "Honeycomb",
+      "email": "support@honeycomb.io"
+  },
   "license": "MIT",
   "homepage": "https://github.com/honeycombio/gha-buildevents",
   "dependencies": {

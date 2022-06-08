@@ -1,5 +1,6 @@
 # `gha-buildevents` Action
 
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/gha-buildevents?color=success)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
 [![CI](https://github.com/honeycombio/gha-buildevents/workflows/CI/badge.svg)](https://github.com/honeycombio/gha-buildevents/actions?query=workflow%3ACI)
 [![Integration](https://github.com/honeycombio/gha-buildevents/workflows/Integration/badge.svg)](https://github.com/honeycombio/gha-buildevents/actions?query=workflow%3AIntegration)
 

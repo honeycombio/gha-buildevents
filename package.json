@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kvrhdn/gha-buildevents.git"
+    "url": "git+https://github.com/honeycombio/gha-buildevents.git"
   },
   "keywords": [
     "GitHub",
@@ -22,7 +22,7 @@
   ],
   "author": "Koenraad Verheyden",
   "license": "MIT",
-  "homepage": "https://github.com/kvrhdn/gha-buildevents",
+  "homepage": "https://github.com/honeycombio/gha-buildevents",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",

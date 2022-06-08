@@ -1,5 +1,5 @@
 name: Honeycomb Buildevents
-author: Koenraad Verheyden
+author: Honeycomb
 description: Trace GitHub Action workflows with Honeycomb
 
 branding:

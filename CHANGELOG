@@ -1,5 +1,13 @@
 # gha-buildevents changelog
 
+## v1.0.6 [2022-06-08]
+
+### Maintenance
+
+- Adoption by Honeycomb (#109 & #111) | [@robbkidd](https://github.com/robbkidd)
+- Update integration failure check to fail in an expected way (#110) | [@robbkidd](https://github.com/robbkidd)
+- Bump dependencies [f9bfe4eb0](https://github.com/honeycombio/gha-buildevents/commit/f9bfe4eb0a4be2a660c40491bd4e6861413e87ca) | [@kvrhdn](https://github.com/kvrhdn)
+
 ## v1.0.5 [2021-02-27]
 
 ### Enhancements

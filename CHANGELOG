@@ -1,0 +1,42 @@
+# gha-buildevents changelog
+
+## v1.0.5 [2021-02-27]
+
+### Enhancements
+
+- `BUILDEVENT_FILE` is now an absolute path, allowing you to run the buildevents binary from any directory (#38). (Thanks to [@sargunv](https://github.com/sargunv)!)
+
+## v1.0.4 [2021-02-01]
+
+### Maintenance
+
+- bumped dependencies and set up Dependabot to monitor these for us from now on. | [@kvrhdn](https://github.com/kvrhdn)
+
+## v1.0.3 [2020-12-20[
+
+### Enhancements
+
+Several fixes and enhancements (again, thanks to [@DavidS](https://github.com/DavidS)!):
+
+- Improved handling of `BUILDEVENT_FILE`:
+  - If the file already exists, properties will be appended instead of overwriting the file #18
+  - The file is created during the start section, because of this every span will contain the `github.*` fields, not just the last two
+- The property `meta.source` is added to every span #19
+- The trace ID is now unique, even when re-running a workflow #20
+- Improved documentation and logging during run
+
+## v1.0.2 [2020-11-21]
+
+### Enhancements
+
+- Added the `matrix-key` input to support jobs using a matrix configuration. (Thanks to [@DavidS](https://github.com/DavidS)!)
+
+## v1.0.1 [2020-10-01]
+
+### Maintenance
+
+- Updated dependencies following the deprecation of `set-env` and `add-path` in the GitHub Actions runtime ([changelog](https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/)). | [@kvrhdn](https://github.com/kvrhdn)
+
+## v1.0.0 [2020-08-26]
+
+Initial release

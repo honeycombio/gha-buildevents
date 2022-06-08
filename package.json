@@ -13,16 +13,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kvrhdn/gha-buildevents.git"
+    "url": "git+https://github.com/honeycombio/gha-buildevents.git"
   },
   "keywords": [
     "GitHub",
     "Actions",
     "Honeycomb.io"
   ],
-  "author": "Koenraad Verheyden",
+  "author": {
+      "name": "Honeycomb",
+      "email": "support@honeycomb.io"
+  },
   "license": "MIT",
-  "homepage": "https://github.com/kvrhdn/gha-buildevents",
+  "homepage": "https://github.com/honeycombio/gha-buildevents",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",

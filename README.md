@@ -1,7 +1,8 @@
 # `gha-buildevents` Action
 
-[![CI](https://github.com/kvrhdn/gha-buildevents/workflows/CI/badge.svg)](https://github.com/kvrhdn/gha-buildevents/actions?query=workflow%3ACI)
-[![Integration](https://github.com/kvrhdn/gha-buildevents/workflows/Integration/badge.svg)](https://github.com/kvrhdn/gha-buildevents/actions?query=workflow%3AIntegration)
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/gha-buildevents?color=success)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
+[![CI](https://github.com/honeycombio/gha-buildevents/workflows/CI/badge.svg)](https://github.com/honeycombio/gha-buildevents/actions?query=workflow%3ACI)
+[![Integration](https://github.com/honeycombio/gha-buildevents/workflows/Integration/badge.svg)](https://github.com/honeycombio/gha-buildevents/actions?query=workflow%3AIntegration)
 
 This GitHub Action instruments your workflows using [Honeycomb's buildevents tool](https://github.com/honeycombio/buildevents). It populates the trace with metadata from the GitHub Actions environment and will always send a trace for the build, even if the build failed.
 
@@ -17,7 +18,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 Put the action at the start of each job:
 
 ```yaml
-- uses: kvrhdn/gha-buildevents@v1
+- uses: honeycombio/gha-buildevents@v1
   with:
     # Required: a Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
@@ -51,7 +52,7 @@ Name         | Required | Description                                          |
 
 Additionally, the following environment variable will be read:
 
-`BUILDEVENT_FILE`: the path to a file containing additional key-value pairs. Data in this file will be attached to every span sent by buildevents. If this environment variable is not set, `gha-buildevents` will set this to a location outside the working directory.  
+`BUILDEVENT_FILE`: the path to a file containing additional key-value pairs. Data in this file will be attached to every span sent by buildevents. If this environment variable is not set, `gha-buildevents` will set this to a location outside the working directory.
 When setting this environment variable, is recommended to set this [at the beginning of the workflow](https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#env).
 
 ### Outputs
@@ -62,7 +63,7 @@ No outputs are set, but the following environment variables are set:
 ```
 <owner>/<repo>-<workflow>-<job>-<run number>-<random number>
 ```
-For example: `kvrhdn/gha-buildevents-Integration-smoke-test-20144-1738717406`.
+For example: `honeycombio/gha-buildevents-Integration-smoke-test-20144-1738717406`.
 
 ## Example
 
@@ -112,3 +113,7 @@ To learn more about buildevents and how to use it, checkout [honeycombio/buildev
 ## License
 
 This Action is distributed under the terms of the MIT license, see [LICENSE](./LICENSE) for details.
+
+## Contributor Alums ❤️
+
+The buildevents GitHub Action was created for the community and generously bequethed to Honeycomb by Koenraad Verheyden ([@kvrhdn](https://github.com/kvrhdn)).

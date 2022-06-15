@@ -98,8 +98,8 @@ To learn more about buildevents and how to use it, checkout [honeycombio/buildev
   # Record the start of the step and, for convenience, set the step ID that will
   # be used for all commands.
 - run: |
-    echo ::set-env name=STEP_ID::0
-    echo ::set-env name=STEP_START::$(date +%s)
+    echo "STEP_ID=0" >> ${GITHUB_ENV}
+    echo "STEP_START=$(date +%s)" >> ${GITHUB_ENV}
 
   # Wrap the commands that should be traced with 'buildevents cmd'
 - run: |

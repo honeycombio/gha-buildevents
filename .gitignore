@@ -1,4 +1,5 @@
 node_modules
+.idea
 
 # ignore intermediate output from tsc
 lib

@@ -1,6 +1,5 @@
 name: Integration Failure
-on:
-  push:
+on: [push, workflow_dispatch]
 
 jobs:
   integration:

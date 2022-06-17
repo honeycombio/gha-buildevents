@@ -16,3 +16,25 @@ Since this project is highly dependent on both GitHub Actions and Honeycomb, it'
     - **Smoke test** should create a proper trace with a couple of spans. Check to see the additional`github.*` fields are set.
     - **Matrix** is a simple workflow using a build matrix. Check each build creates a unique trace.
 - [**Integration Failure**](https://github.com/honeycombio/gha-buildevents/actions?query=workflow%3A%22Integration+Failure%22) : this run should create a trace in Honeycomb, with `job.status` equal to `failure`.
+
+Pull requests to this project from forks will not have workflows run automatically. A maintainer will be along to review and run the CI soon after a PR is opened.
+
+### Note to Maintainers:
+
+Sadly, GitHub is not showing us the "Approve and run" button for workflows. Our workaround: checkout the PR's branch, push it directly to this repository with a specific name, see the CI run, then delete the branch. An easy way to do this is with [the GitHub CLI](https://cli.github.com/).
+
+```
+# be in a clone of this repository
+» cd gha-buildevents
+
+# checkout pull request #42
+» gh pr checkout 42
+
+# rename the checkedout branch to test-<pr number> to avoid branch name conflicts
+» git branch -m test-42
+
+# push the branch to origin
+» git push origin test-42
+```
+
+This pushes the same commits as exist on the pull request. Actions will run and apply check statuses on the latest commit which matches the commit sha for the PR so the status will apply to the PR as well.

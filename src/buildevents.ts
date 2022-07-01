@@ -25,7 +25,7 @@ export async function install(apikey: string, dataset: string): Promise<void> {
 
   util.setEnv('BUILDEVENT_APIKEY', apikey)
   util.setEnv('BUILDEVENT_DATASET', dataset)
-  util.setEnv('BUILDEVENT_CIPROVIDER', 'github-actions')
+  util.setEnv('BUILDEVENT_CIPROVIDER', 'gha-buildevents')
 }
 
 export function addFields(keyValueMap: object): void {

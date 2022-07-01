@@ -5471,7 +5471,7 @@ function install(apikey, dataset) {
         core.addPath(path.dirname(toolPath));
         util.setEnv('BUILDEVENT_APIKEY', apikey);
         util.setEnv('BUILDEVENT_DATASET', dataset);
-        util.setEnv('BUILDEVENT_CIPROVIDER', 'github-actions');
+        util.setEnv('BUILDEVENT_CIPROVIDER', 'gha-buildevents');
     });
 }
 exports.install = install;

@@ -1,6 +1,6 @@
 {
   "name": "gha-buildevents",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "GitHub Actions to integrate Honeycomb's buidlevents tool into your workflows",
   "main": "lib/index.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "logfmt": "^1.3.2"
   },
   "devDependencies": {
-    "@types/node": "^14.14.41",
+    "@types/node": "^18.0.4",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "@zeit/ncc": "^0.22.3",

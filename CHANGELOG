@@ -1,5 +1,11 @@
 # gha-buildevents changelog
 
+## v1.0.7 [2022-07-14]
+
+### Maintenance
+
+- Pass a unique CIPROVIDER to buildevents (#122) | [@dstrelau](https://github.com/dstrelau)
+
 ## v1.0.6 [2022-06-08]
 
 ### Maintenance

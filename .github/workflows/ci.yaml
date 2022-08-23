@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: honeycombio/gha-buildevents@v1
         with:
-          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
           job-status: ${{ job.status }}
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
 
       - uses: actions/checkout@v2
 

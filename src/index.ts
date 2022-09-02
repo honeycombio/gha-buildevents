@@ -29,6 +29,13 @@ async function run(): Promise<void> {
     const dataset = core.getInput('dataset')
     await buildevents.install(apikey, dataset)
 
+    let my_test_value = core.getInput('matrix-key')
+    let another_test_value
+    if (!my_test_value) {
+      another_test_value = 'mj-testing'
+    } else {
+      another_test_value = my_test_value
+    }
     buildevents.addFields({
       // available environment variables
       // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
@@ -44,7 +51,8 @@ async function run(): Promise<void> {
       'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
       'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
       'github.job': util.getEnv('GITHUB_JOB'), // undocumented
-      'github.matrix-key': !core.getInput('matrix-key') ? 'test' : core.getInput('matrix-key'),
+      'matrix-key': my_test_value,
+      'another-matrix-key': another_test_value,
       'runner.os': util.getEnv('RUNNER_OS'), // undocumented
       'meta.source': 'gha-buildevents'
     })

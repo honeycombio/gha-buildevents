@@ -3831,7 +3831,7 @@ function run() {
                 'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
                 'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
                 'github.job': util.getEnv('GITHUB_JOB'),
-                'github.matrix-key': !core.getInput('matrix-key') ? "test" : core.getInput('matrix-key'),
+                'github.matrix-key': !core.getInput('matrix-key') ? 'test' : core.getInput('matrix-key'),
                 'runner.os': util.getEnv('RUNNER_OS'),
                 'meta.source': 'gha-buildevents'
             });

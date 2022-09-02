@@ -3819,7 +3819,7 @@ function run() {
             let my_test_value = core.getInput('matrix-key');
             let another_test_value;
             if (!my_test_value) {
-                another_test_value = "mj-testing";
+                another_test_value = 'mj-testing';
             }
             else {
                 another_test_value = my_test_value;

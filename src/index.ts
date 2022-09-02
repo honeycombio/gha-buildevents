@@ -27,7 +27,7 @@ async function run(): Promise<void> {
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
     const dataset = core.getInput('dataset') ? core.getInput('dataset') : 'buildevents'
-    const matrix_key = core.getInput('matrix-key') != '' ? core.getInput('matrix-key') : 'matrix-key'
+    // const matrix_key = core.getInput('matrix-key') != '' ? core.getInput('matrix-key') : 'matrix-key'
 
     await buildevents.install(apikey, dataset)
 
@@ -46,7 +46,7 @@ async function run(): Promise<void> {
       'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
       'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
       'github.job': util.getEnv('GITHUB_JOB'), // undocumented
-      'github.matrix-key': matrix_key,
+      'github.matrix-key': 'matrix_keyYYYYYYYYY',
       'runner.os': util.getEnv('RUNNER_OS'), // undocumented
       'meta.source': 'gha-buildevents'
     })

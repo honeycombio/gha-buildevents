@@ -3814,7 +3814,7 @@ function run() {
             core.info(`Trace ID: ${traceId}`);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
-            const dataset = core.getInput('dataset', { required: true });
+            const dataset = core.getInput('dataset') ? core.getInput('dataset') : 'buildevents';
             yield buildevents.install(apikey, dataset);
             buildevents.addFields({
                 // available environment variables

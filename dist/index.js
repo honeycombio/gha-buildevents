@@ -3815,7 +3815,7 @@ function run() {
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
             const dataset = core.getInput('dataset') ? core.getInput('dataset') : 'buildevents';
-            const matrix_key = core.getInput('matrix-key') ? core.getInput('matrix-key') : 'matrix-key';
+            const matrix_key = core.getInput('matrix-key') != "" ? core.getInput('matrix-key') : 'matrix-key';
             yield buildevents.install(apikey, dataset);
             buildevents.addFields({
                 // available environment variables

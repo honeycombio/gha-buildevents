@@ -27,7 +27,7 @@ async function run(): Promise<void> {
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
     const dataset = core.getInput('dataset') ? core.getInput('dataset') : 'buildevents'
-    const matrix_key = core.getInput('matrix-key') ? core.getInput('matrix-key') : 'matrix-key'
+    const matrix_key = core.getInput('matrix-key') != '' ? core.getInput('matrix-key') : 'matrix-key'
 
     await buildevents.install(apikey, dataset)
 

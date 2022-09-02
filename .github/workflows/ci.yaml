@@ -17,6 +17,7 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           job-status: ${{ job.status }}
+          dataset: gha-buildevents_integration
 
       - uses: actions/checkout@v2
 

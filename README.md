@@ -24,12 +24,12 @@ Put the action at the start of each job:
     # Required: a Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
 
-    # Required: the Honeycomb dataset to send traces to.
-    dataset: gha-buildevents_integration
-
     # Required: the job status, this will be used in the post section and sent
     # as status of the trace. Must always be ${{ job.status }}.
     job-status: ${{ job.status }}
+
+    # Optional: the Honeycomb dataset to send traces to. Defaults to `buildevents`
+    dataset: buildevents
 
     # Optional: this should only be used in combination with matrix builds. Set
     # this to a value uniquely describing each matrix configuration.

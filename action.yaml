@@ -12,7 +12,7 @@ inputs:
     required: true
   dataset:
     description: The Honeycomb dataset to send traces to.
-    required: true
+    required: false
   job-status:
     description: The job status.
     required: true

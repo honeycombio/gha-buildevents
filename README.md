@@ -47,7 +47,7 @@ Put the action at the start of each job:
 Name         | Required | Description                                          | Type
 -------------|----------|------------------------------------------------------|-------
 `apikey`     | yes      | API key used to communicate with the Honeycomb API.  | string
-`dataset`    | yes      | Honeycomb dataset to use.                            | string
+`dataset`    | no       | Honeycomb dataset to use.                            | string
 `job-status` | yes      | The job status, must be set to `${{ job.status }}`.  | string
 `matrix-key` | no       | Set this to a key unique for this matrix cell.       | string
 

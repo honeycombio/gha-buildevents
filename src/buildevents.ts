@@ -24,7 +24,13 @@ export async function install(apikey: string, dataset: string): Promise<void> {
   core.addPath(path.dirname(toolPath))
 
   util.setEnv('BUILDEVENT_APIKEY', apikey)
-  util.setEnv('BUILDEVENT_DATASET', dataset)
+
+  if (!dataset) {
+    util.setEnv('BUILDEVENT_DATASET', 'buildevents')
+  } else {
+    util.setEnv('BUILDEVENT_DATASET', dataset)
+  }
+
   util.setEnv('BUILDEVENT_CIPROVIDER', 'gha-buildevents')
 }
 

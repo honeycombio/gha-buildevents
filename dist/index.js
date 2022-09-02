@@ -3815,6 +3815,7 @@ function run() {
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
             const dataset = core.getInput('dataset') ? core.getInput('dataset') : 'buildevents';
+            const matrix_key = core.getInput('matrix-key') ? core.getInput('matrix-key') : 'matrix-key';
             yield buildevents.install(apikey, dataset);
             buildevents.addFields({
                 // available environment variables
@@ -3831,7 +3832,7 @@ function run() {
                 'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
                 'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
                 'github.job': util.getEnv('GITHUB_JOB'),
-                'github.matrix-key': core.getInput('matrix-key'),
+                'github.matrix-key': matrix_key,
                 'runner.os': util.getEnv('RUNNER_OS'),
                 'meta.source': 'gha-buildevents'
             });

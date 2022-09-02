@@ -40,7 +40,7 @@ jobs:
       - uses: honeycombio/gha-buildevents@v1
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          dataset: ''
+          dataset: gha-buildevents_integration
           job-status: ${{ job.status }}
 
       - uses: actions/checkout@v2

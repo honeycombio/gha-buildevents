@@ -3814,9 +3814,8 @@ function run() {
             core.info(`Trace ID: ${traceId}`);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
-            const dataset = core.getInput('dataset');
+            const dataset = !core.getInput('dataset') ? 'buildevents' : core.getInput('dataset');
             yield buildevents.install(apikey, dataset);
-            let my_test_value = !core.getInput('matrix-key') ? 'mj-testing' : core.getInput('matrix-key');
             buildevents.addFields({
                 // available environment variables
                 // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
@@ -3832,8 +3831,7 @@ function run() {
                 'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
                 'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
                 'github.job': util.getEnv('GITHUB_JOB'),
-                'matrix-key': my_test_value,
-                'another-matrix-key': core.getInput('matrix-key'),
+                'github.matrix-key': core.getInput('matrix-key'),
                 'runner.os': util.getEnv('RUNNER_OS'),
                 'meta.source': 'gha-buildevents'
             });

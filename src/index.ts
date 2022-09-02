@@ -26,7 +26,7 @@ async function run(): Promise<void> {
 
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
-    const dataset = core.getInput('dataset', { required: true })
+    const dataset = core.getInput('dataset') ? core.getInput('dataset') : 'buildevents'
 
     await buildevents.install(apikey, dataset)
 

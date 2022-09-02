@@ -19,7 +19,6 @@ jobs:
         uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          dataset: gha-buildevents_integration
           job-status: ${{ job.status }}
 
       - run: echo "STEP_ID=0" >> $GITHUB_ENV

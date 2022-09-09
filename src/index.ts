@@ -69,7 +69,7 @@ async function run(): Promise<void> {
     // save buildStart to be used in the post section
     core.saveState('buildStart', buildStart.toString())
     core.saveState('isPost', 'true')
-    if (core.getInput('status')) {
+    if (core.getInput('status') || core.getInput('job-status')) {
       core.saveState('endTrace', 'true')
     }
   } catch (error) {
@@ -84,7 +84,8 @@ async function runPost(): Promise<void> {
     const traceId = util.getEnv('TRACE_ID') ?? '0'
     // use trace-start if it's provided otherwise use the start time for current job
     const traceStart = core.getInput('trace-start') ? core.getInput('trace-start') : core.getState('buildStart')
-    const workflowStatus = core.getInput('status')
+    // if status is empty, grab legacy job-status value
+    const workflowStatus = core.getInput('status') ? core.getInput('status') : core.getInput('job-status')
     const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure'
 
     buildevents.addFields({

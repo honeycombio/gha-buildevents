@@ -11,23 +11,11 @@ async function run(): Promise<void> {
     }
 
     const buildStart = util.getTimestamp()
-    core.setOutput('start-timestamp', buildStart)
-
-    const traceComponents = [
-      util.getEnv('GITHUB_REPOSITORY'),
-      util.getEnv('GITHUB_WORKFLOW'),
-      util.getEnv('GITHUB_RUN_NUMBER'),
-      util.getEnv('GITHUB_RUN_ATTEMPT')
-    ]
-    const traceId = core.getInput('trace-id')
-      ? core.getInput('trace-id')
-      : util.replaceSpaces(traceComponents.filter(value => value).join('-'))
+    const traceId = buildTraceId()
 
     core.info(`Trace ID: ${traceId}`)
     // set TRACE_ID to be used throughout the job
     util.setEnv('TRACE_ID', traceId)
-    // set output so TRACE_ID can be passed from job to job throughout workflow
-    core.setOutput('trace-id', traceId)
 
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
@@ -81,7 +69,7 @@ async function runPost(): Promise<void> {
   try {
     const postStart = util.getTimestamp()
 
-    const traceId = util.getEnv('TRACE_ID') ?? '0'
+    const traceId = buildTraceId()
     // use trace-start if it's provided otherwise use the start time for current job
     const traceStart = core.getInput('trace-start') ? core.getInput('trace-start') : core.getState('buildStart')
     // if status is empty, grab legacy job-status value
@@ -106,4 +94,14 @@ if (!isPost) {
   run()
 } else if (isPost && endTrace) {
   runPost()
+}
+
+function buildTraceId(): string {
+  const traceComponents = [
+    util.getEnv('GITHUB_REPOSITORY'),
+    util.getEnv('GITHUB_WORKFLOW'),
+    util.getEnv('GITHUB_RUN_NUMBER'),
+    util.getEnv('GITHUB_RUN_ATTEMPT')
+  ]
+  return util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 }

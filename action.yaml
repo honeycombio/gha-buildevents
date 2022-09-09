@@ -23,11 +23,7 @@ inputs:
     description: Deprecated value - please use status instead
     deprecationMessage: job-status is now deprecated - please use status instead
 
-outputs:
-  trace-id:
-    description: Trace id set by the Action. Useful for workflows with multiple jobs.
-  start-timestamp:
-    description: Timestamp set by the Action. Useful for workflows with multiple jobs.
+# outputs
 
 runs:
   using: node12

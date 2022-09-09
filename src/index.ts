@@ -73,11 +73,11 @@ async function runPost(): Promise<void> {
     const traceId = util.getEnv('TRACE_ID') ?? '0'
     const buildStart = core.getState('buildStart')
 
-    const jobStatus = core.getInput('job-status', { required: true })
-    const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure'
+    const workflowStatus = core.getInput('status')
+    const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure'
 
     buildevents.addFields({
-      'job.status': jobStatus
+      'workflow.status': workflowStatus
     })
 
     await buildevents.step(traceId, util.randomInt(2 ** 32).toString(), postStart.toString(), 'gha-buildevents_post')

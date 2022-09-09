@@ -13,9 +13,9 @@ inputs:
   dataset:
     description: The Honeycomb dataset to send traces to.
     required: true
-  job-status:
-    description: The job status.
-    required: true
+  status:
+    description: Status of the job or worfklow. Setting this signals when to end the trace.
+    required: false
   matrix-key:
     description: Set this to a key unique for this matrix cell, only useful when using a build matrix.
     required: false

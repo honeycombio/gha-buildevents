@@ -14,11 +14,8 @@ async function run(): Promise<void> {
     const traceComponents = [
       util.getEnv('GITHUB_REPOSITORY'),
       util.getEnv('GITHUB_WORKFLOW'),
-      util.getEnv('GITHUB_JOB'),
       util.getEnv('GITHUB_RUN_NUMBER'),
-      core.getInput('matrix-key'),
-      // append a random number to ensure traceId is unique when the workflow is re-run
-      util.randomInt(2 ** 32).toString()
+      util.getEnv('GITHUB_RUN_ATTEMPT')
     ]
     const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 

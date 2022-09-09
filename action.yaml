@@ -18,6 +18,7 @@ inputs:
     required: false
   trace-start:
     description: Unix timestamp to represent when the trace started. Not necessary for single job workflows. Send in final use of the action for multi-job workflows.
+    required: false
   matrix-key:
     description: Set this to a key unique for this matrix cell, only useful when using a build matrix.
     required: false

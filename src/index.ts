@@ -19,14 +19,16 @@ async function run(): Promise<void> {
       util.getEnv('GITHUB_RUN_NUMBER'),
       util.getEnv('GITHUB_RUN_ATTEMPT')
     ]
-    const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
+    const traceId = core.getInput('trace-id')
+      ? core.getInput('trace-id')
+      : util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 
     core.info(`Trace ID: ${traceId}`)
     // set TRACE_ID to be used throughout the job
     util.setEnv('TRACE_ID', traceId)
     // set output so TRACE_ID can be passed from job to job throughout workflow
     core.setOutput('trace-id', traceId)
-    
+
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
     const dataset = core.getInput('dataset', { required: true })
@@ -54,13 +56,22 @@ async function run(): Promise<void> {
     })
 
     // create a first step to time installation of buildevents
-    await buildevents.step(traceId, util.randomInt(2 ** 32).toString(), buildStart.toString(), 'gha-buildevents_init')
+    const initStepComponents = ['gha-buildevents_init', util.getEnv('GITHUB_JOB'), core.getInput('matrix-key')]
+    await buildevents.step(
+      traceId,
+      util.randomInt(2 ** 32).toString(),
+      buildStart.toString(),
+      util.replaceSpaces(initStepComponents.filter(value => value).join('-'))
+    )
 
     core.info('Init done! buildevents is now available on the path.')
 
     // save buildStart to be used in the post section
     core.saveState('buildStart', buildStart.toString())
     core.saveState('isPost', 'true')
+    if (core.getInput('status')) {
+      core.saveState('endTrace', 'true')
+    }
   } catch (error) {
     core.setFailed(error.message)
   }
@@ -71,8 +82,8 @@ async function runPost(): Promise<void> {
     const postStart = util.getTimestamp()
 
     const traceId = util.getEnv('TRACE_ID') ?? '0'
-    const buildStart = core.getState('buildStart')
-
+    // use trace-start if it's provided otherwise use the start time for current job
+    const traceStart = core.getInput('trace-start') ? core.getInput('trace-start') : core.getState('buildStart')
     const workflowStatus = core.getInput('status')
     const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure'
 
@@ -81,16 +92,17 @@ async function runPost(): Promise<void> {
     })
 
     await buildevents.step(traceId, util.randomInt(2 ** 32).toString(), postStart.toString(), 'gha-buildevents_post')
-    await buildevents.build(traceId, buildStart, result)
+    await buildevents.build(traceId, traceStart, result)
   } catch (error) {
     core.setFailed(error.message)
   }
 }
 
 const isPost = !!core.getState('isPost')
+const endTrace = !!core.getState('endTrace')
 
 if (!isPost) {
   run()
-} else {
+} else if (isPost && endTrace) {
   runPost()
 }

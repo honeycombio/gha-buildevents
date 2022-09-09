@@ -20,7 +20,11 @@ inputs:
     description: Set this to a key unique for this matrix cell, only useful when using a build matrix.
     required: false
 
-#outputs:
+outputs:
+  trace-id:
+    description: Trace id set by the Action. Useful for workflows with multiple jobs.
+  start-timestamp:
+    description: Timestamp set by the Action. Useful for workflows with multiple jobs.
 
 runs:
   using: node12

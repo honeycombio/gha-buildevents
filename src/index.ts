@@ -11,6 +11,8 @@ async function run(): Promise<void> {
     }
 
     const buildStart = util.getTimestamp()
+    core.setOutput('start-timestamp', buildStart)
+
     const traceComponents = [
       util.getEnv('GITHUB_REPOSITORY'),
       util.getEnv('GITHUB_WORKFLOW'),
@@ -20,7 +22,11 @@ async function run(): Promise<void> {
     const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
 
     core.info(`Trace ID: ${traceId}`)
-
+    // set TRACE_ID to be used throughout the job
+    util.setEnv('TRACE_ID', traceId)
+    // set output so TRACE_ID can be passed from job to job throughout workflow
+    core.setOutput('trace-id', traceId)
+    
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
     const dataset = core.getInput('dataset', { required: true })
@@ -52,8 +58,6 @@ async function run(): Promise<void> {
 
     core.info('Init done! buildevents is now available on the path.')
 
-    // set TRACE_ID to be used throughout the workflow
-    util.setEnv('TRACE_ID', traceId)
     // save buildStart to be used in the post section
     core.saveState('buildStart', buildStart.toString())
     core.saveState('isPost', 'true')

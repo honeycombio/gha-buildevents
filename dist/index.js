@@ -3855,6 +3855,7 @@ function runPost() {
             const workflowStatus = core.getInput('status') ? core.getInput('status') : core.getInput('job-status');
             const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
             buildevents.addFields({
+                'job.status': workflowStatus,
                 'workflow.status': workflowStatus
             });
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), postStart.toString(), 'gha-buildevents_post');

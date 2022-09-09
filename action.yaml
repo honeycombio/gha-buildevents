@@ -19,6 +19,9 @@ inputs:
   matrix-key:
     description: Set this to a key unique for this matrix cell, only useful when using a build matrix.
     required: false
+  job-status:
+    description: Deprecated value - please use status instead
+    deprecationMessage: job-status is now deprecated - please use status instead
 
 outputs:
   trace-id:

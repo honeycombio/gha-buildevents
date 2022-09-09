@@ -3808,7 +3808,9 @@ function run() {
                 util.getEnv('GITHUB_RUN_NUMBER'),
                 util.getEnv('GITHUB_RUN_ATTEMPT')
             ];
-            const traceId = core.getInput('trace-id') ? core.getInput('trace-id') : util.replaceSpaces(traceComponents.filter(value => value).join('-'));
+            const traceId = core.getInput('trace-id')
+                ? core.getInput('trace-id')
+                : util.replaceSpaces(traceComponents.filter(value => value).join('-'));
             core.info(`Trace ID: ${traceId}`);
             // set TRACE_ID to be used throughout the job
             util.setEnv('TRACE_ID', traceId);
@@ -3844,7 +3846,7 @@ function run() {
             // save buildStart to be used in the post section
             core.saveState('buildStart', buildStart.toString());
             core.saveState('isPost', 'true');
-            if (core.getInput('status')) {
+            if (core.getInput('status') || core.getInput('job-status')) {
                 core.saveState('endTrace', 'true');
             }
         }
@@ -3861,7 +3863,8 @@ function runPost() {
             const traceId = (_a = util.getEnv('TRACE_ID')) !== null && _a !== void 0 ? _a : '0';
             // use trace-start if it's provided otherwise use the start time for current job
             const traceStart = core.getInput('trace-start') ? core.getInput('trace-start') : core.getState('buildStart');
-            const workflowStatus = core.getInput('status');
+            // if status is empty, grab legacy job-status value
+            const workflowStatus = core.getInput('status') ? core.getInput('status') : core.getInput('job-status');
             const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
             buildevents.addFields({
                 'workflow.status': workflowStatus

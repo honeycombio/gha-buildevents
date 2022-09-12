@@ -109,5 +109,6 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          status: ${{ job.status }}
+          trace-start: ${{ needs.build.outputs.trace-start}}
+          status: ${{ env.WORKFLOW_CONCLUSION }}
           matrix-key: ${{ matrix.value }}

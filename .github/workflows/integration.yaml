@@ -10,7 +10,7 @@ on:
     - cron: "0 * * * *" # run once every hour
 
 jobs:
-  trace-start:
+  start-trace:
     runs-on: ubuntu-latest
 
     steps:

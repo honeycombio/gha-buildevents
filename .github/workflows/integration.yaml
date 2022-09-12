@@ -24,9 +24,6 @@ jobs:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           # Required: the Honeycomb dataset to send traces to.
           dataset: gha-buildevents_integration
-          # Optional: this should only be used in combination with matrix builds. Set
-          # this to a value uniquely describing each matrix configuration.
-          matrix-key: ${{ matrix.value }}
 
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
@@ -108,5 +105,5 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          status: ${{ workflow.status }}
+          status: ${{ job.status }}
           matrix-key: ${{ matrix.value }}

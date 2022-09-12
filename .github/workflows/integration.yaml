@@ -57,6 +57,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo ::set-output name=trace-start::$(date +%s)
+        if: strategy.job-index == 0 # since this is a matrix, only set the output for the first item in the matrix
+
+      - name: "Honeycomb: setup recording"
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          matrix-key: ${{ matrix.service }}
+          # note status is not supplied here because we don't want to end the trace yet
+
       - name: Buildevents
         uses: ./
         with:
@@ -74,3 +88,20 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+
+  end-trace:
+    runs-on: ubuntu-latest
+    needs: [ smoke-test, matrix ]
+    if: ${{ always() }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: technote-space/workflow-conclusion-action@v3
+
+      - uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          trace-start: ${{ needs.build.outputs.trace-start}}
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          matrix-key: ${{ matrix.value }}

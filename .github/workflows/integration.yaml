@@ -20,10 +20,9 @@ jobs:
           echo ::set-output name=trace-start::$(date +%s)
       - uses: honeycombio/gha-buildevents@v1
         with:
-          # Required: a Honeycomb API key - needed to send traces.
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          # Required: the Honeycomb dataset to send traces to.
           dataset: gha-buildevents_integration
+          status: ${{ job.status }}
 
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}

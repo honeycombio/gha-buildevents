@@ -10,41 +10,6 @@ on:
     - cron: "0 * * * *" # run once every hour
 
 jobs:
-  smoke-test:
-    name: Smoke test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Buildevents
-        uses: ./
-        with:
-          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          dataset: gha-buildevents_integration
-          status: ${{ job.status }}
-
-      - name: Print contents of BUILDEVENT_FILE
-        run: |
-          echo Contents of BUILDEVENT_FILE:
-          cat $BUILDEVENT_FILE
-
-      - run: |
-          echo "STEP_ID=0" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
-
-      - run: |
-          echo "STEP_ID=1" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: |
-          buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'
-
   matrix:
     name: Matrix
     runs-on: ubuntu-latest
@@ -63,20 +28,11 @@ jobs:
           echo ::set-output name=trace-start::$(date +%s)
         if: strategy.job-index == 0 # since this is a matrix, only set the output for the first item in the matrix
 
-      - name: "Honeycomb: setup recording"
-        uses: ./
-        with:
-          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          dataset: gha-buildevents_integration
-          matrix-key: ${{ matrix.service }}
-          # note status is not supplied here because we don't want to end the trace yet
-
       - name: Buildevents
         uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          status: ${{ job.status }}
           matrix-key: ${{ matrix.value }}
 
       - run: |

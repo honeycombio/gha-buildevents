@@ -1,5 +1,11 @@
 # gha-buildevents changelog
 
+## v1.1.0 [2022-09-12]
+
+### Enhancements
+
+- Support and allow for traces to be workflow scoped (#137) | [@brookesargent](https://github.com/brookesargent)
+
 ## v1.0.7 [2022-07-14]
 
 ### Maintenance

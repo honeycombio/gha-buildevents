@@ -10,9 +10,31 @@ on:
     - cron: "0 * * * *" # run once every hour
 
 jobs:
+  trace-start:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo ::set-output name=trace-start::$(date +%s)
+      - uses: honeycombio/gha-buildevents@v1
+        with:
+          # Required: a Honeycomb API key - needed to send traces.
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          # Required: the Honeycomb dataset to send traces to.
+          dataset: gha-buildevents_integration
+          # Optional: this should only be used in combination with matrix builds. Set
+          # this to a value uniquely describing each matrix configuration.
+          matrix-key: ${{ matrix.value }}
+
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+
   smoke-test:
     name: Smoke test
     runs-on: ubuntu-latest
+    needs: [ trace-start ]
 
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +44,7 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
+          status: ${{ job.status }}
 
       - name: Print contents of BUILDEVENT_FILE
         run: |
@@ -48,11 +70,12 @@ jobs:
   matrix:
     name: Matrix
     runs-on: ubuntu-latest
+    needs: [ trace-start ]
 
     strategy:
       fail-fast: false
       matrix:
-        value: [valueA, valueB]
+        value: [ valueA, valueB ]
 
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +85,7 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
+          status: ${{ job.status }}
           matrix-key: ${{ matrix.value }}
 
       - run: |
@@ -74,3 +97,16 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+
+  end-trace:
+    runs-on: ubuntu-latest
+    needs: [ trace-start, smoke-test, matrix ]
+    if: ${{ always() }}
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v3
+      - uses: honeycombio/gha-buildevents@v1
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          status: ${{ workflow.status }}
+          matrix-key: ${{ matrix.value }}

@@ -49,7 +49,7 @@ jobs:
 
   end-trace:
     runs-on: ubuntu-latest
-    needs: [ smoke-test, matrix ]
+    needs: [ matrix ]
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v2

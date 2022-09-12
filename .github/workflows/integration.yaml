@@ -24,7 +24,6 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          status: ${{ job.status }}
 
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}

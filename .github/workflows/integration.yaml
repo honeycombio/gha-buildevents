@@ -10,9 +10,63 @@ on:
     - cron: "0 * * * *" # run once every hour
 
 jobs:
+  start-trace:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo ::set-output name=trace-start::$(date +%s)
+      - uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+
+  smoke-test:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    needs: [ start-trace ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+      - name: Print contents of BUILDEVENT_FILE
+        run: |
+          echo Contents of BUILDEVENT_FILE:
+          cat $BUILDEVENT_FILE
+
+      - run: |
+          echo "STEP_ID=0" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - run: |
+          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
+      - run: |
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+
+      - run: |
+          echo "STEP_ID=1" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - run: |
+          buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
+      - run: |
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'
+
   matrix:
     name: Matrix
     runs-on: ubuntu-latest
+    needs: [ start-trace ]
 
     strategy:
       fail-fast: false
@@ -22,12 +76,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set trace-start
-        id: set-trace-start
-        run: |
-          echo ::set-output name=trace-start::$(date +%s)
-        if: strategy.job-index == 0 # since this is a matrix, only set the output for the first item in the matrix
-
       - name: Buildevents
         uses: ./
         with:
@@ -36,24 +84,27 @@ jobs:
           matrix-key: ${{ matrix.value }}
 
       - run: |
-           echo The matrix value is ${{ matrix.value }}
+          echo "STEP_ID=0" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          sleep 2
+          buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
-          echo The matrix value is ${{ matrix.value }}
-    outputs:
-      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
+      - run: |
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
 
   end-trace:
     runs-on: ubuntu-latest
-    needs: [ matrix ]
+    needs: [ start-trace, smoke-test, matrix ]
     if: ${{ always() }}
     steps:
-      - uses: technote-space/workflow-conclusion-action@v3
       - uses: actions/checkout@v2
+
+      - uses: technote-space/workflow-conclusion-action@v3
+
       - uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          trace-start: ${{ needs.matrix.outputs.trace-start}}
+          trace-start: ${{ needs.start-trace.outputs.trace-start}}
           status: ${{ env.WORKFLOW_CONCLUSION }}

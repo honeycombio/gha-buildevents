@@ -6,7 +6,7 @@
 
 This GitHub Action instruments your workflows using [Honeycomb's buildevents tool](https://github.com/honeycombio/buildevents). It populates the trace with metadata from the GitHub Actions environment and will always send a trace for the build, even if the build failed.
 
-`gha-buildevents` has to be added to every job that should be instrumented. Every job will create a separate trace.
+`gha-buildevents` has to be added to every job that should be instrumented.
 
 ### ⚠️ Limitations
 
@@ -16,7 +16,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ## How to use it
 
-Put the action at the start of each job:
+### Single Job Workflow
 
 ```yaml
 - uses: honeycombio/gha-buildevents@v1
@@ -27,15 +27,74 @@ Put the action at the start of each job:
     # Required: the Honeycomb dataset to send traces to.
     dataset: gha-buildevents_integration
 
-    # Required: the job status, this will be used in the post section and sent
-    # as status of the trace. Must always be ${{ job.status }}.
-    job-status: ${{ job.status }}
+    # Optional: status, this will be used in the post section and sent
+    # as status of the trace. Set on the final job of a workflow to signal for the trace to # end
+    status: ${{ job.status }}
 
     # Optional: this should only be used in combination with matrix builds. Set
     # this to a value uniquely describing each matrix configuration.
     matrix-key: ${{ matrix.value }}
 
 # ... the rest of your job ...
+
+# gha-buildevents will automatically run as a post action and execute 'buildevents build'
+```
+
+### Multi Job Workflow
+
+Job 1
+```yaml
+build:
+  runs-on: ubuntu-latest
+  
+  steps:
+    - name: Set trace-start
+      id: set-trace-start
+      run: |
+        echo ::set-output name=trace-start::$(date +%s)
+    - uses: honeycombio/gha-buildevents@v1
+      with:
+        # Required: a Honeycomb API key - needed to send traces.
+        apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+
+        # Required: the Honeycomb dataset to send traces to.
+        dataset: gha-buildevents_integration
+
+        # Optional: this should only be used in combination with matrix builds. Set
+        # this to a value uniquely describing each matrix configuration.
+        matrix-key: ${{ matrix.value }}
+
+  # ... the rest of your job ...
+  outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }} 
+
+# ... Job 2 ...
+```
+
+Job 3 (ends the trace)
+```yaml
+end-trace:
+  runs-on: ubuntu-latest
+  needs: [job1, job2]
+  if: ${{ always() }}
+  steps:
+  - uses: technote-space/workflow-conclusion-action@v3
+  - uses: honeycombio/gha-buildevents@v1
+    with:
+      # Required: a Honeycomb API key - needed to send traces.
+      apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+
+      # Required: the Honeycomb dataset to send traces to.
+      dataset: gha-buildevents_integration
+      # Optional: status, this will be used in the post section and sent
+      # as status of the trace. Set on the final job of a workflow to signal for the trace # to end
+      status: ${{ env.WORKFLOW_CONCLUSION }}
+      # Optional: trace-start, this will be used in the post section and sent
+      # to calculate duration of the trace. In multi job workflows, set on the final job of a workflow. Not necessary for single job workflows
+      trace-start: ${{ needs.build.outputs.trace-start}}
+      # Optional: this should only be used in combination with matrix builds. Set
+      # this to a value uniquely describing each matrix configuration.
+      matrix-key: ${{ matrix.value }}
 
 # gha-buildevents will automatically run as a post action and execute 'buildevents build'
 ```
@@ -48,7 +107,7 @@ Name         | Required | Description                                          |
 -------------|----------|------------------------------------------------------|-------
 `apikey`     | yes      | API key used to communicate with the Honeycomb API.  | string
 `dataset`    | yes      | Honeycomb dataset to use.                            | string
-`job-status` | yes      | The job status, must be set to `${{ job.status }}`.  | string
+`status`     | yes      | The job or workflow status                           | string
 `matrix-key` | no       | Set this to a key unique for this matrix cell.       | string
 
 Additionally, the following environment variable will be read:
@@ -60,11 +119,11 @@ When setting this environment variable, is recommended to set this [at the begin
 
 No outputs are set, but the following environment variables are set:
 
-`TRACE_ID`: the trace ID is a combination of the repository, the workflow, the job name, the run number, optionally a matrix key and a random string. This trace ID will be unique across re-runs of the workflow. The format:
+`TRACE_ID`: the trace ID is a combination of the repository, the workflow, the job name, the run number, the run attempt, and optionally a matrix key. This trace ID will be unique across re-runs of the workflow. The format:
 ```
-<owner>/<repo>-<workflow>-<job>-<run number>-<random number>
+<owner>/<repo>-<workflow>-<job>-<run number>-<run attempt>
 ```
-For example: `honeycombio/gha-buildevents-Integration-smoke-test-20144-1738717406`.
+For example: `honeycombio/gha-buildevents-Integration-smoke-test-20144-1`.
 
 ## Example
 

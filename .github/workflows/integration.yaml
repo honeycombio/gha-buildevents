@@ -88,6 +88,8 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
   end-trace:
     runs-on: ubuntu-latest

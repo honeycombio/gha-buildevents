@@ -77,6 +77,7 @@ async function runPost(): Promise<void> {
     const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure'
 
     buildevents.addFields({
+      'job.status': workflowStatus,
       'workflow.status': workflowStatus
     })
 

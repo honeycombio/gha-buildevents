@@ -18,7 +18,7 @@ jobs:
         id: set-trace-start
         run: |
           echo ::set-output name=trace-start::$(date +%s)
-      - uses: honeycombio/gha-buildevents@v1
+      - uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
@@ -100,7 +100,7 @@ jobs:
     if: ${{ always() }}
     steps:
       - uses: technote-space/workflow-conclusion-action@v3
-      - uses: honeycombio/gha-buildevents@v1
+      - uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration

@@ -43,6 +43,7 @@ jobs:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
           status: ${{ job.status }}
+          trace-start: ${{ needs.build.outputs.trace-start}}
 
       - name: Print contents of BUILDEVENT_FILE
         run: |
@@ -85,6 +86,7 @@ jobs:
           dataset: gha-buildevents_integration
           status: ${{ job.status }}
           matrix-key: ${{ matrix.value }}
+          trace-start: ${{ needs.build.outputs.trace-start}}
 
       - run: |
           echo "STEP_ID=0" >> $GITHUB_ENV

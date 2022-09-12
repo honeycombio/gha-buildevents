@@ -36,9 +36,6 @@ jobs:
           matrix-key: ${{ matrix.value }}
 
       - run: |
-          echo "STEP_ID=0" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: |
            echo The matrix value is ${{ matrix.value }}
       - run: |
           sleep 2
@@ -62,4 +59,3 @@ jobs:
           dataset: gha-buildevents_integration
           trace-start: ${{ needs.build.outputs.trace-start}}
           status: ${{ env.WORKFLOW_CONCLUSION }}
-          matrix-key: ${{ matrix.value }}

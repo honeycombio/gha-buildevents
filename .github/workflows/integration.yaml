@@ -49,13 +49,11 @@ jobs:
     needs: [ matrix ]
     if: ${{ always() }}
     steps:
-      - uses: actions/checkout@v2
-
       - uses: technote-space/workflow-conclusion-action@v3
-
+      - uses: actions/checkout@v2
       - uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          trace-start: ${{ needs.build.outputs.trace-start}}
+          trace-start: ${{ needs.matrix.outputs.trace-start}}
           status: ${{ env.WORKFLOW_CONCLUSION }}

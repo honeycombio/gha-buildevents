@@ -87,7 +87,7 @@ jobs:
     steps:
      - uses: technote-space/workflow-conclusion-action@v3
      - name: "Honeycomb: install buildevents"
-       uses: honeycombio/gha-buildevents@brookesargent.multi-job-support
+       uses: ./
        with:
          # Required: a Honeycomb API key - needed to send traces.
          #           this must be set in your GitHub repository under Settings > Secrets > Actions

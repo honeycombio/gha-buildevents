@@ -3881,6 +3881,9 @@ function buildTraceId() {
         util.getEnv('GITHUB_RUN_NUMBER'),
         util.getEnv('GITHUB_RUN_ATTEMPT')
     ];
+    if (isPost) {
+        traceComponents.push(util.getEnv('GITHUB_JOB'));
+    }
     return util.replaceSpaces(traceComponents.filter(value => value).join('-'));
 }
 

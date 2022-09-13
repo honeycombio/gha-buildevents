@@ -36,11 +36,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set trace-start
-        id: set-trace-start
-        run: |
-          echo ::set-output name=trace-start::smoke-test          
-
       - name: Buildevents
         uses: ./
         with:
@@ -79,11 +74,6 @@ jobs:
         value: [ valueA, valueB ]
 
     steps:
-      - name: Set trace-start
-        id: set-trace-start
-        run: |
-          echo ::set-output name=trace-start::${{ matrix.value }}          
-
       - uses: actions/checkout@v2
 
       - name: Buildevents

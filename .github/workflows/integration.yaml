@@ -30,16 +30,14 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          echo "STEP_ID=smoke-test-part-one" >> $GITHUB_ENV
+          STEP_ID=smoke-test
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'smoke-test-part-one'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START
 
-      - run: |
-          echo "STEP_ID=smoke-test-part-two" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
@@ -66,11 +64,12 @@ jobs:
           matrix-key: ${{ matrix.value }}
 
       - run: |
-          echo "STEP_ID=${{ matrix.value }}" >> $GITHUB_ENV
+          STEP_ID=test-${{ matrix.value }}
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START '${{ matrix.value }} step 1'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START

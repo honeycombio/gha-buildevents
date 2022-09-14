@@ -85,6 +85,7 @@ jobs:
     needs: [smoke-test, matrix]
     if: ${{ always() }}
     steps:
+      - uses: actions/checkout@v2
       - uses: technote-space/workflow-conclusion-action@v3
       - name: "Honeycomb: install buildevents"
         uses: ./

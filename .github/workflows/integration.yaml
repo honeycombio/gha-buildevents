@@ -34,7 +34,7 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          echo "STEP_ID=0" >> $GITHUB_ENV
+          echo "STEP_ID=smoke-test-part-one" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
@@ -42,7 +42,7 @@ jobs:
           buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
 
       - run: |
-          echo "STEP_ID=1" >> $GITHUB_ENV
+          echo "STEP_ID=smoke-test-part-two" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
@@ -71,7 +71,7 @@ jobs:
           matrix-key: ${{ matrix.value }}
 
       - run: |
-          echo "STEP_ID=0" >> $GITHUB_ENV
+          echo "STEP_ID=${{ matrix.value }}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
@@ -90,12 +90,7 @@ jobs:
      - name: "Honeycomb: install buildevents"
        uses: ./
        with:
-         # Required: a Honeycomb API key - needed to send traces.
-         #           this must be set in your GitHub repository under Settings > Secrets > Actions
          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-        # Required: the Honeycomb dataset to send traces to.
          dataset: gha-buildevents_integration
-         # Required: the job status, this will be used in the post section and sent
-         #           as status of the trace. Must always be ${{ job.status }}.
          status: ${{ env.WORKFLOW_CONCLUSION }}
          trace-start: ${{ needs.smoke-test.outputs.trace-start}}

@@ -3,7 +3,7 @@ name: Integration
 on:
   push:
     branches:
-      - brookesargent.allow-multijob-trace
+      - main
   workflow_dispatch:
   pull_request:
   schedule:

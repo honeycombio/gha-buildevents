@@ -39,7 +39,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'smoke-test-part-one'
 
       - run: |
           echo "STEP_ID=smoke-test-part-two" >> $GITHUB_ENV
@@ -47,7 +47,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START 'smoke-test-part-two'
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
@@ -78,7 +78,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START '${{ matrix.value }} step 1'
 
   end-trace:
     runs-on: ubuntu-latest

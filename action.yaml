@@ -13,16 +13,22 @@ inputs:
   dataset:
     description: The Honeycomb dataset to send traces to.
     required: true
-  job-status:
-    description: The job status.
-    required: true
+  status:
+    description: Status of the job or worfklow. Setting this signals when to end the trace.
+    required: false
+  trace-start:
+    description: Unix timestamp to represent when the trace started. Not necessary for single job workflows. Send in final use of the action for multi-job workflows.
+    required: false
   matrix-key:
     description: Set this to a key unique for this matrix cell, only useful when using a build matrix.
     required: false
+  job-status:
+    description: Deprecated value - please use status instead
+    deprecationMessage: job-status is now deprecated - please use status instead
 
-#outputs:
+# outputs
 
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
   post: dist/index.js

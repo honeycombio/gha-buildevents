@@ -3801,17 +3801,10 @@ function run() {
                 core.debug(`- ${key} = ${process.env[key]}`);
             }
             const buildStart = util.getTimestamp();
-            const traceComponents = [
-                util.getEnv('GITHUB_REPOSITORY'),
-                util.getEnv('GITHUB_WORKFLOW'),
-                util.getEnv('GITHUB_JOB'),
-                util.getEnv('GITHUB_RUN_NUMBER'),
-                core.getInput('matrix-key'),
-                // append a random number to ensure traceId is unique when the workflow is re-run
-                util.randomInt(Math.pow(2, 32)).toString()
-            ];
-            const traceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'));
+            const traceId = buildTraceId();
             core.info(`Trace ID: ${traceId}`);
+            // set TRACE_ID to be used throughout the job
+            util.setEnv('TRACE_ID', traceId);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
             const dataset = core.getInput('dataset', { required: true });
@@ -3836,13 +3829,15 @@ function run() {
                 'meta.source': 'gha-buildevents'
             });
             // create a first step to time installation of buildevents
-            yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), buildStart.toString(), 'gha-buildevents_init');
+            const initStepComponents = ['gha-buildevents_init', util.getEnv('GITHUB_JOB'), core.getInput('matrix-key')];
+            yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), buildStart.toString(), util.replaceSpaces(initStepComponents.filter(value => value).join('-')));
             core.info('Init done! buildevents is now available on the path.');
-            // set TRACE_ID to be used throughout the workflow
-            util.setEnv('TRACE_ID', traceId);
             // save buildStart to be used in the post section
             core.saveState('buildStart', buildStart.toString());
             core.saveState('isPost', 'true');
+            if (core.getInput('status') || core.getInput('job-status')) {
+                core.saveState('endTrace', 'true');
+            }
         }
         catch (error) {
             core.setFailed(error.message);
@@ -3850,19 +3845,21 @@ function run() {
     });
 }
 function runPost() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const postStart = util.getTimestamp();
-            const traceId = (_a = util.getEnv('TRACE_ID')) !== null && _a !== void 0 ? _a : '0';
-            const buildStart = core.getState('buildStart');
-            const jobStatus = core.getInput('job-status', { required: true });
-            const result = jobStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
+            const traceId = buildTraceId();
+            // use trace-start if it's provided otherwise use the start time for current job
+            const traceStart = core.getInput('trace-start') ? core.getInput('trace-start') : core.getState('buildStart');
+            // if status is empty, grab legacy job-status value
+            const workflowStatus = core.getInput('status') ? core.getInput('status') : core.getInput('job-status');
+            const result = workflowStatus.toUpperCase() == 'SUCCESS' ? 'success' : 'failure';
             buildevents.addFields({
-                'job.status': jobStatus
+                'job.status': workflowStatus,
+                'workflow.status': workflowStatus
             });
             yield buildevents.step(traceId, util.randomInt(Math.pow(2, 32)).toString(), postStart.toString(), 'gha-buildevents_post');
-            yield buildevents.build(traceId, buildStart, result);
+            yield buildevents.build(traceId, traceStart, result);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -3870,11 +3867,21 @@ function runPost() {
     });
 }
 const isPost = !!core.getState('isPost');
+const endTrace = !!core.getState('endTrace');
 if (!isPost) {
     run();
 }
-else {
+else if (isPost && endTrace) {
     runPost();
+}
+function buildTraceId() {
+    const traceComponents = [
+        util.getEnv('GITHUB_REPOSITORY'),
+        util.getEnv('GITHUB_WORKFLOW'),
+        util.getEnv('GITHUB_RUN_NUMBER'),
+        util.getEnv('GITHUB_RUN_ATTEMPT')
+    ];
+    return util.replaceSpaces(traceComponents.filter(value => value).join('-'));
 }
 
 

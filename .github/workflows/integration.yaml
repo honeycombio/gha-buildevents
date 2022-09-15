@@ -53,7 +53,6 @@ jobs:
   matrix:
     name: Matrix
     runs-on: ubuntu-latest
-    needs: [smoke-test]
 
     strategy:
       fail-fast: false
@@ -62,6 +61,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo ::set-output name=trace-start::$(date +%s)
 
       - name: Buildevents
         uses: ./
@@ -80,10 +84,12 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
-  end-trace:
+  end-trace-smoke-test:
     runs-on: ubuntu-latest
-    needs: [smoke-test, matrix]
+    needs: [smoke-test]
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v2
@@ -100,3 +106,23 @@ jobs:
           #           as status of the trace. Must always be ${{ job.status }}.
           status: ${{ env.WORKFLOW_CONCLUSION }}
           trace-start: ${{ needs.smoke-test.outputs.trace-start}}
+
+  end-trace-matrix:
+    runs-on: ubuntu-latest
+    needs: [matrix]
+    if: ${{ always() }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: technote-space/workflow-conclusion-action@v3
+      - name: Buildevents
+        uses: ./
+        with:
+          # Required: a Honeycomb API key - needed to send traces.
+          #           this must be set in your GitHub repository under Settings > Secrets > Actions
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          # Required: the Honeycomb dataset to send traces to.
+          dataset: gha-buildevents_integration
+          # Required: the job status, this will be used in the post section and sent
+          #           as status of the trace. Must always be ${{ job.status }}.
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          trace-start: ${{ needs.matrix.outputs.trace-start}}

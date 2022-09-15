@@ -17,12 +17,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo ::set-output name=trace-start::$(date +%s)          
+
       - name: Buildevents
         uses: ./
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
 
       - name: Print contents of BUILDEVENT_FILE
         run: |
@@ -30,24 +34,26 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          echo "STEP_ID=0" >> $GITHUB_ENV
+          STEP_ID=smoke-test
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 
-      - run: |
-          echo "STEP_ID=1" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 2'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+
 
   matrix:
     name: Matrix
     runs-on: ubuntu-latest
+    needs: [smoke-test]
 
     strategy:
       fail-fast: false
@@ -62,15 +68,36 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
           matrix-key: ${{ matrix.value }}
 
       - run: |
-          echo "STEP_ID=0" >> $GITHUB_ENV
+          STEP_ID=matrix-${{ matrix.value }}
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START 'step 1'
+          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+
+  end-trace:
+    name: End Trace
+    runs-on: ubuntu-latest
+    needs: [smoke-test, matrix]
+    if: ${{ always() }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: technote-space/workflow-conclusion-action@v3
+      - name: Buildevents
+        uses: ./
+        with:
+          # Required: a Honeycomb API key - needed to send traces.
+          #           this must be set in your GitHub repository under Settings > Secrets > Actions
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          # Required: the Honeycomb dataset to send traces to.
+          dataset: gha-buildevents_integration
+          # Required: the job status, this will be used in the post section and sent
+          #           as status of the trace. Must always be ${{ job.status }}.
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          trace-start: ${{ needs.smoke-test.outputs.trace-start}}

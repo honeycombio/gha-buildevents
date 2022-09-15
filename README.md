@@ -14,6 +14,10 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 - if downloading or executing buildevents fails, the entire job will fail
 
+- **adopting version 2.0.0**: each Job MUST include unique STEP IDs to ensure each job's spans are properly organized together. 
+  - An example of adopting these changes is in the [Integration Worflow](.github/workflows/integration.yaml) of this repo. Here is the corresponding trace:
+    ![Integration Workflow Trace](images/integration-worflow.png)
+
 ## How to use it
 
 ### Single Job Workflow
@@ -42,9 +46,12 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ### Multi Job Workflow
 
-Job 1
+In the **FIRST JOB**
+
+Note: The step to start the workflow's trace should run first (before other jobs too)
+
 ```yaml
-build:
+the-job-that-runs-first:
   runs-on: ubuntu-latest
   
   steps:
@@ -71,11 +78,12 @@ build:
 # ... Job 2 ...
 ```
 
-Job 3 (ends the trace)
+Then add the **new** **LAST JOB**
+
 ```yaml
 end-trace:
   runs-on: ubuntu-latest
-  needs: [job1, job2]
+  needs: [the-job-that-runs-first, job2]
   if: ${{ always() }}
   steps:
   - uses: technote-space/workflow-conclusion-action@v3
@@ -83,15 +91,18 @@ end-trace:
     with:
       # Required: a Honeycomb API key - needed to send traces.
       apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-
+      
       # Required: the Honeycomb dataset to send traces to.
       dataset: gha-buildevents_integration
+      
       # Optional: status, this will be used in the post section and sent
       # as status of the trace. Set on the final job of a workflow to signal for the trace # to end
       status: ${{ env.WORKFLOW_CONCLUSION }}
+      
       # Optional: trace-start, this will be used in the post section and sent
       # to calculate duration of the trace. In multi job workflows, set on the final job of a workflow. Not necessary for single job workflows
       trace-start: ${{ needs.build.outputs.trace-start}}
+      
       # Optional: this should only be used in combination with matrix builds. Set
       # this to a value uniquely describing each matrix configuration.
       matrix-key: ${{ matrix.value }}

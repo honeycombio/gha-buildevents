@@ -10,8 +10,8 @@ on:
     - cron: "0 * * * *" # run once every hour
 
 jobs:
-  smoke-test:
-    name: Smoke test
+  start-trace:
+    name: Start workflow trace
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +21,22 @@ jobs:
         id: set-trace-start
         run: |
           echo ::set-output name=trace-start::$(date +%s)          
+
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+
+  smoke-test:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    needs: [start-trace]
+
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Buildevents
         uses: ./
@@ -46,14 +62,12 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
-    outputs:
-      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
 
   matrix:
     name: Matrix
     runs-on: ubuntu-latest
-    needs: [smoke-test]
+    needs: [start-trace]
 
     strategy:
       fail-fast: false
@@ -83,7 +97,7 @@ jobs:
 
   end-trace:
     runs-on: ubuntu-latest
-    needs: [smoke-test, matrix]
+    needs: [start-trace, smoke-test, matrix]
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v2
@@ -99,4 +113,4 @@ jobs:
           # Required: the job status, this will be used in the post section and sent
           #           as status of the trace. Must always be ${{ job.status }}.
           status: ${{ env.WORKFLOW_CONCLUSION }}
-          trace-start: ${{ needs.smoke-test.outputs.trace-start}}
+          trace-start: ${{ needs.start-trace.outputs.trace-start}}

@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: technote-space/workflow-conclusion-action@v3
-      - name: "Honeycomb: install buildevents"
+      - name: Buildevents
         uses: ./
         with:
           # Required: a Honeycomb API key - needed to send traces.

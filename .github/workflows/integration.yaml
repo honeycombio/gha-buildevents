@@ -82,6 +82,7 @@ jobs:
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 
   end-trace:
+    name: End Trace
     runs-on: ubuntu-latest
     needs: [smoke-test, matrix]
     if: ${{ always() }}

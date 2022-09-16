@@ -14,7 +14,13 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 - if downloading or executing buildevents fails, the entire job will fail
 
-- **adopting version 2.0.0**: each Job MUST include unique STEP IDs to ensure each job's spans are properly organized together. 
+### 📣 Adopting version 2.0.0
+
+- The required input field `job-status` has been renamed to `status`. This was done because status now can be job's or the workflow's. 
+  We still support job-status but will give a warning that it is deprecated and encourage the switch to the status field.
+
+
+- Each Job MUST include unique STEP IDs to ensure each job's spans are properly organized together.
   - An example of adopting these changes is in the [Integration Worflow](.github/workflows/integration.yaml) of this repo. Here is the corresponding trace:
     ![Integration Workflow Trace](images/integration-worflow.png)
 
@@ -33,6 +39,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
     # Optional: status, this will be used in the post section and sent
     # as status of the trace. Set on the final job of a workflow to signal for the trace to # end
+    # job-status has been deprecated
     status: ${{ job.status }}
 
     # Optional: this should only be used in combination with matrix builds. Set
@@ -97,6 +104,7 @@ end-trace:
       
       # Optional: status, this will be used in the post section and sent
       # as status of the trace. Set on the final job of a workflow to signal for the trace # to end
+      # job-status has been deprecated
       status: ${{ env.WORKFLOW_CONCLUSION }}
       
       # Optional: trace-start, this will be used in the post section and sent

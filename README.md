@@ -29,7 +29,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 ### Single Job Workflow
 
 ```yaml
-- uses: honeycombio/gha-buildevents@v1
+- uses: honeycombio/gha-buildevents@v2
   with:
     # Required: a Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENT_APIKEY }}
@@ -37,9 +37,9 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
     # Required: the Honeycomb dataset to send traces to.
     dataset: gha-buildevents_integration
 
-    # Optional: status, this will be used in the post section and sent
-    # as status of the trace. Set on the final job of a workflow to signal for the trace to # end
-    # job-status has been deprecated
+    # Required on the final job: status, this will be used in the post section and sent
+    # as status of the trace. Set on the final job of a workflow to signal for the trace # to end
+    # Note: in V1 this was called job-status which has been deprecated
     status: ${{ job.status }}
 
     # Optional: this should only be used in combination with matrix builds. Set
@@ -66,7 +66,7 @@ the-job-that-runs-first:
       id: set-trace-start
       run: |
         echo ::set-output name=trace-start::$(date +%s)
-    - uses: honeycombio/gha-buildevents@v1
+    - uses: honeycombio/gha-buildevents@v2
       with:
         # Required: a Honeycomb API key - needed to send traces.
         apikey: ${{ secrets.BUILDEVENT_APIKEY }}
@@ -94,7 +94,7 @@ end-trace:
   if: ${{ always() }}
   steps:
   - uses: technote-space/workflow-conclusion-action@v3
-  - uses: honeycombio/gha-buildevents@v1
+  - uses: honeycombio/gha-buildevents@v2
     with:
       # Required: a Honeycomb API key - needed to send traces.
       apikey: ${{ secrets.BUILDEVENT_APIKEY }}
@@ -102,9 +102,9 @@ end-trace:
       # Required: the Honeycomb dataset to send traces to.
       dataset: gha-buildevents_integration
       
-      # Optional: status, this will be used in the post section and sent
+      # Required on the final job: status, this will be used in the post section and sent
       # as status of the trace. Set on the final job of a workflow to signal for the trace # to end
-      # job-status has been deprecated
+      # Note: in V1 this was called job-status which has been deprecated
       status: ${{ env.WORKFLOW_CONCLUSION }}
       
       # Optional: trace-start, this will be used in the post section and sent

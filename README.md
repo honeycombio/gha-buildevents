@@ -32,7 +32,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 - uses: honeycombio/gha-buildevents@v1
   with:
     # Required: a Honeycomb API key - needed to send traces.
-    apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+    apikey: ${{ secrets.BUILDEVENT_APIKEY }}
 
     # Required: the Honeycomb dataset to send traces to.
     dataset: gha-buildevents_integration
@@ -69,7 +69,7 @@ the-job-that-runs-first:
     - uses: honeycombio/gha-buildevents@v1
       with:
         # Required: a Honeycomb API key - needed to send traces.
-        apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+        apikey: ${{ secrets.BUILDEVENT_APIKEY }}
 
         # Required: the Honeycomb dataset to send traces to.
         dataset: gha-buildevents_integration
@@ -97,7 +97,7 @@ end-trace:
   - uses: honeycombio/gha-buildevents@v1
     with:
       # Required: a Honeycomb API key - needed to send traces.
-      apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+      apikey: ${{ secrets.BUILDEVENT_APIKEY }}
       
       # Required: the Honeycomb dataset to send traces to.
       dataset: gha-buildevents_integration

@@ -38,7 +38,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
     dataset: gha-buildevents_integration
 
     # Required on the final job: status, this will be used in the post section and sent
-    # as status of the trace. Set on the final job of a workflow to signal for the trace # to end
+    # as status of the trace. Set on the final job of a workflow to signal for the trace to end
     # Note: in V1 this was called job-status which has been deprecated
     status: ${{ job.status }}
 

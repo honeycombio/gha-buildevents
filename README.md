@@ -16,10 +16,10 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ### 📣 Adopting version 2.0.0
 
-- The required input field `job-status` has been renamed to `status`. This was done because status now can be job's or the workflow's. 
+- The input field `job-status` has been renamed to `status`. This no longer required in every job. This was done because status now can be job's or the workflow's. 
   We still support job-status but will give a warning that it is deprecated and encourage the switch to the status field.
 
-- Including the `status` field ends a trace. For multi job workflows this is only required as part of the last job. Do NOT include this in every job.
+- `status` is no longer required in every job because including the `status` field ends a trace. For multi job workflows this is only required as part of the last job or the job that will end the trace.
 
 - Each Job MUST include unique STEP IDs to ensure each job's spans are properly organized together.
   - An example of adopting these changes is in the [Integration Worflow](.github/workflows/integration.yaml) of this repo. Here is the corresponding trace:

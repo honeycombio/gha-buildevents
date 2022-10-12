@@ -16,9 +16,10 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ### 📣 Adopting version 2.0.0
 
-- The required input field `job-status` has been renamed to `status`. This was done because status now can be job's or the workflow's. 
+- The input field `job-status` has been renamed to `status`. This is no longer required in every job. This was done because status can now be job status or workflow status. 
   We still support job-status but will give a warning that it is deprecated and encourage the switch to the status field.
 
+- `status` is no longer required in every job because including the `status` field ends a trace. For multi job workflows this is only required as part of the last job or the job that will end the trace.
 
 - Each Job MUST include unique STEP IDs to ensure each job's spans are properly organized together.
   - An example of adopting these changes is in the [Integration Worflow](.github/workflows/integration.yaml) of this repo. Here is the corresponding trace:
@@ -55,7 +56,6 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 In the **FIRST JOB**
 
-Note: The step to start the workflow's trace should run first (before other jobs too)
 
 ```yaml
 the-job-that-runs-first:
@@ -85,7 +85,14 @@ the-job-that-runs-first:
 # ... Job 2 ...
 ```
 
-Then add the **new** **LAST JOB**
+**NOTE:**
+
+The step to start the workflow's trace should run first (before other jobs too). You do not need to start the trace in subsequent jobs.
+
+The output is important. This is the `trace-start` timestamp and will be used by the LAST job to ensure the duration of the full trace is correct.
+
+
+Add the **new** **LAST JOB**
 
 ```yaml
 end-trace:

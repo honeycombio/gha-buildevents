@@ -89,7 +89,7 @@ the-job-that-runs-first:
 
 The step to start the workflow's trace should run first (before other jobs too). You do not need to start the trace in subsequent jobs.
 
-The output is important. This is the parent trace ID and will be used by the LAST job to connect all other traces.
+The output is important. This is the `trace-start` timestamp and will be used by the LAST job to ensure the duration of the full trace is correct.
 
 
 Add the **new** **LAST JOB**

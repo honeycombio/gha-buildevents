@@ -16,7 +16,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ### 📣 Adopting version 2.0.0
 
-- The input field `job-status` has been renamed to `status`. This no longer required in every job. This was done because status now can be job's or the workflow's. 
+- The input field `job-status` has been renamed to `status`. This is no longer required in every job. This was done because status can now be job status or workflow status. 
   We still support job-status but will give a warning that it is deprecated and encourage the switch to the status field.
 
 - `status` is no longer required in every job because including the `status` field ends a trace. For multi job workflows this is only required as part of the last job or the job that will end the trace.

@@ -56,7 +56,6 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 In the **FIRST JOB**
 
-Note: The step to start the workflow's trace should run first (before other jobs too)
 
 ```yaml
 the-job-that-runs-first:
@@ -86,7 +85,14 @@ the-job-that-runs-first:
 # ... Job 2 ...
 ```
 
-Then add the **new** **LAST JOB**
+**NOTE:**
+
+The step to start the workflow's trace should run first (before other jobs too). You do not need to start the trace in subsequent jobs.
+
+The output is important. This is the parent trace ID and will be used by the LAST job to connect all other traces.
+
+
+Add the **new** **LAST JOB**
 
 ```yaml
 end-trace:

@@ -17,9 +17,14 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
+          status: ${{ job.status }}
 
       - uses: actions/checkout@v2
+
+      - run: |
+          STEP_ID=pack
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
 
       - run: npm ci
       - run: npm run build
@@ -41,9 +46,14 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
+          status: ${{ job.status }}
 
       - uses: actions/checkout@v2
+
+      - run: |
+          STEP_ID=lint-format
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
 
       - run: npm ci
       - run: npm run lint

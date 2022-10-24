@@ -3621,7 +3621,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.replaceSpaces = exports.randomInt = exports.getTimestamp = exports.setEnv = exports.getEnv = void 0;
+exports.constructExecutableName = exports.replaceSpaces = exports.randomInt = exports.getTimestamp = exports.setEnv = exports.getEnv = void 0;
 const core = __importStar(__webpack_require__(470));
 function getEnv(name) {
     return process.env[name];
@@ -3643,6 +3643,35 @@ function replaceSpaces(str) {
     return str.replace(/\s+/g, '_');
 }
 exports.replaceSpaces = replaceSpaces;
+function constructExecutableName() {
+    let processArch = '';
+    switch (process.arch) {
+        case 'x64':
+            processArch = 'amd64';
+            break;
+        case 'x32':
+            processArch = '386';
+            break;
+        case 'arm64':
+            processArch = 'arm64';
+            break;
+        default:
+            throw new Error(`Unsupported arch ${process.arch}'`);
+    }
+    let processPlatform = '';
+    switch (process.platform) {
+        case 'darwin':
+            processPlatform = 'darwin';
+            break;
+        case 'linux':
+            processPlatform = 'linux';
+            break;
+        default:
+            throw new Error(`Unsupported platform ${process.platform}'`);
+    }
+    return 'buildevents-' + processPlatform + '-' + processArch;
+}
+exports.constructExecutableName = constructExecutableName;
 
 
 /***/ }),
@@ -6609,7 +6638,7 @@ const util = __importStar(__webpack_require__(345));
 function install(apikey, dataset) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info('Downloading and installing buildevents');
-        const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64';
+        const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/' + util.constructExecutableName();
         core.info(`Downloading from ${url}`);
         const downloadPath = yield tc.downloadTool(url);
         // rename downloaded binary - downloadPath is similar to a UUID by default

@@ -10,7 +10,7 @@ import * as util from './util'
 export async function install(apikey: string, dataset: string): Promise<void> {
   core.info('Downloading and installing buildevents')
 
-  const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/buildevents-linux-amd64'
+  const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/' + util.constructExecutableName()
   core.info(`Downloading from ${url}`)
 
   const downloadPath = await tc.downloadTool(url)

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: honeycombio/gha-buildevents@v1
+      - uses: honeycombio/gha-buildevents@v2
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: honeycombio/gha-buildevents@v1
+      - uses: honeycombio/gha-buildevents@v2
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration

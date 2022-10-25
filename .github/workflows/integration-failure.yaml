@@ -27,11 +27,10 @@ jobs:
           echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Sleepy Time
-        run: buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 1
+        run: buildevents cmd $TRACE_ID "$STEP_ID" sleep -- sleep 1
       - run: |
           STEP_ID="Expected Failure"
           echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Expected Failure
-        continue-on-error: true
-        run: buildevents cmd $TRACE_ID $STEP_ID 'failing step' -- cat "$(mktemp)/doesnotexist"; [ $? -eq 1 ]
+        run: ./github/scripts/test-be-failure

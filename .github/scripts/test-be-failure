@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# a helper script to verify that the 'buildevents' binary properly passes through
+# a failed command.
+#
+# this is happening in a script to give us control over catching the failure and
+# asserting the result
+
+buildevents cmd "$TRACE_ID" "$STEP_ID" 'failing step' -- cat "$(mktemp)/doesnotexist"
+if [ $? -eq 1 ]; then
+  exit 0
+else
+  echo "buildevent binary did not pass through expected error code"
+  exit 127
+fi

@@ -1,5 +1,23 @@
 # gha-buildevents changelog
 
+## v2.1.0 [2022-10-25]
+
+### Enhancements
+
+- Documentation improvements (#146, #147, #156) | [@mjayaram](https://github.com/mjayaram)
+- Construct the buildevents executable name from platform and arch (#157) | [@dougwettlaufer](https://github.com/dougwettlaufer)
+
+### Maintenance
+
+- Bump gha-buildevents to v2 and fix CI (#158) | [@jharley](https://github.com/jharley)
+- Bump actions/checkout from 2 to 3 (#149) | [@jharley](https://github.com/jharley)
+- Bump @typescript-eslint/eslint-plugin from 4.22.0 to 4.33.0 (#155) | [@jharley](https://github.com/jharley)
+- Bump @types/logfmt from 1.2.1 to 1.2.2 (#154) | [@jharley](https://github.com/jharley)
+- Bump @actions/core from 1.9.1 to 1.10.0 (#150) | [@jharley](https://github.com/jharley)
+- Bump @actions/io from 1.1.0 to 1.1.2 (#152) | [@jharley](https://github.com/jharley)
+- Bump typescript from 4.2.4 to 4.8.4 (#153) | [@jharley](https://github.com/jharley)
+- Upgrade ncc to vercel-maintained version (#159) | [@jharley](https://github.com/jharley)
+
 ## v2.0.0 [2022-09-16]
 
 ### Breaking Change and Enhancement

@@ -20,10 +20,17 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          job-status: ${{ job.status }}
+          status: ${{ job.status }}
 
-      - run: echo "STEP_ID=0" >> $GITHUB_ENV
+      - run: |
+          STEP_ID="Sleepy Time"
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Sleepy Time
-        run: buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 1
+        run: buildevents cmd $TRACE_ID "$STEP_ID" sleep -- sleep 1
+      - run: |
+          STEP_ID="Expected Failure"
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Expected Failure
-        run: buildevents cmd $TRACE_ID $STEP_ID 'failing step' -- exit 1
+        run: ./.github/scripts/test-be-failure

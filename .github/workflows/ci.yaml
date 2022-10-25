@@ -9,7 +9,7 @@ on:
 
 jobs:
   pack:
-    name: Check dist/ is up-to-date
+    name: CI
     runs-on: ubuntu-latest
 
     steps:

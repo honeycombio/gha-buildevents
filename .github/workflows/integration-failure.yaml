@@ -33,4 +33,4 @@ jobs:
           echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Expected Failure
-        run: ./github/scripts/test-be-failure
+        run: ./.github/scripts/test-be-failure

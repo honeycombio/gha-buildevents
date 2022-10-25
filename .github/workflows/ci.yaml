@@ -22,12 +22,33 @@ jobs:
       - uses: actions/checkout@v2
 
       - run: |
+          STEP_ID=install dependencies
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - run: npm ci
+
+      - run: |
+          STEP_ID=lint
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - run: npm run lint
+
+      - run: |
+          STEP_ID=format-check
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - run: npm run format-check
+
+      - run: |
+          STEP_ID=build
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - run: npm run build
+
+      - run: |
           STEP_ID=pack
           echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-
-      - run: npm ci
-      - run: npm run build
       - run: npm run pack
 
       - name: Verify no changes were made
@@ -36,25 +57,3 @@ jobs:
             echo "Changes detected! Please run 'npm run all' before committing code changes."
             exit 1
           fi
-
-  lint-format:
-    name: Lint & format
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: honeycombio/gha-buildevents@v2
-        with:
-          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          dataset: gha-buildevents_integration
-          status: ${{ job.status }}
-
-      - uses: actions/checkout@v2
-
-      - run: |
-          STEP_ID=lint-format
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run format-check

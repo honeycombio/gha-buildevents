@@ -26,7 +26,7 @@ export function constructExecutableName(): string {
     case 'x64':
       processArch = 'amd64'
       break
-    case 'x32':
+    case 'ia32':
       processArch = '386'
       break
     case 'arm64':

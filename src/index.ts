@@ -61,7 +61,9 @@ async function run(): Promise<void> {
       core.saveState('endTrace', 'true')
     }
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
   }
 }
 
@@ -84,7 +86,9 @@ async function runPost(): Promise<void> {
     await buildevents.step(traceId, util.randomInt(2 ** 32).toString(), postStart.toString(), 'gha-buildevents_post')
     await buildevents.build(traceId, traceStart, result)
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
   }
 }
 

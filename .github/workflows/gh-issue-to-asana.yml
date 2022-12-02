@@ -1,0 +1,24 @@
+name: Sync Github Issue to Asana
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-asana-task:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create Asana task
+        run: |
+          curl --location --request POST 'https://app.asana.com/api/1.0/tasks' \
+            --header 'Authorization: Bearer ${{ secrets.ASANA_PAT }}' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+                "data": {
+                    "name": "${{ github.event.issue.title }}",
+                    "notes": "${{ github.event.issue.body }}\nsource: https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/issues/${{ github.event.issue.number }}",
+                    "projects": ["${{ secrets.ASANA_PROJECT_ID }}"],
+                    "assignee_section": "${{ secrets.ASANA_SECTION_ID }}",
+                    "workspace": "${{ secrets.ASANA_WORKSPACE_ID }}"
+                }
+            }'

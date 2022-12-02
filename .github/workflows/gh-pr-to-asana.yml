@@ -1,0 +1,30 @@
+name: Sync Github Pull Request to Asana
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  create-asana-attachment-job:
+    runs-on: ubuntu-latest
+    name: Create pull request attachments on Asana tasks
+    steps:
+      - name: Create pull request attachments
+        uses: Asana/create-app-attachment-github-action@latest
+        id: postAttachment
+        with:
+          asana-secret: ${{ secrets.ASANA_SECRET }}
+      - name: Create task if not found
+        if: ${{ !contains(steps.postAttachment.outputs.status, '201') }}
+        run: |
+          curl --location --request POST 'https://app.asana.com/api/1.0/tasks' \
+            --header "Authorization: Bearer ${{ secrets.ASANA_PAT }}" \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+                "data": {
+                    "name": "${{ github.event.pull_request.title }}",
+                    "notes": "${{ github.event.pull_request.body }}\nsource: https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/pull/${{ github.event.pull_request.number }}",
+                    "projects": ["${{ secrets.ASANA_PROJECT_ID }}"],
+                    "assignee_section": "${{ secrets.ASANA_SECTION_ID }}",
+                    "workspace": "${{ secrets.ASANA_WORKSPACE_ID }}"
+                }
+            }'

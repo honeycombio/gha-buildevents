@@ -1,0 +1,25 @@
+name: Sync Github Pull Request to Asana
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  create-asana-attachment-job:
+    runs-on: ubuntu-latest
+    name: Create pull request attachments on Asana tasks
+    steps:
+      - name: Create pull request attachments
+        uses: Asana/create-app-attachment-github-action@latest
+        id: postAttachment
+        with:
+          asana-secret: ${{ secrets.ASANA_SECRET }}
+      - name: Create task if not found
+        if: ${{ !contains(steps.postAttachment.outputs.status, '201') }}
+        uses: honeycombio/gha-create-asana-task@v1.0.0
+        with:
+          asana-secret: ${{ secrets.ASANA_PAT }}
+          asana-workspace-id: ${{ secrets.ASANA_WORKSPACE_ID }}
+          asana-project-id: ${{ secrets.ASANA_PROJECT_ID }}
+          asana-section-id: ${{ secrets.ASANA_SECTION_ID }}
+          asana-task-name: ${{ github.event.pull_request.title }}
+          asana-task-description: ${{ github.event.pull_request.body }}

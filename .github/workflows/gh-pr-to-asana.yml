@@ -1,6 +1,6 @@
 name: Sync Github Pull Request to Asana
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened]
 
 jobs:
@@ -9,7 +9,7 @@ jobs:
     name: Create pull request attachments on Asana tasks
     steps:
       - name: Create pull request attachments
-        uses: Asana/create-app-attachment-github-action@latest
+        uses: honeycombio/gha-create-pr-attachment@main
         id: postAttachment
         with:
           asana-secret: ${{ secrets.ASANA_SECRET }}

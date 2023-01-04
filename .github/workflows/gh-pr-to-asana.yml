@@ -21,5 +21,7 @@ jobs:
           asana-workspace-id: ${{ secrets.ASANA_WORKSPACE_ID }}
           asana-project-id: ${{ secrets.ASANA_PROJECT_ID }}
           asana-section-id: ${{ secrets.ASANA_SECTION_ID }}
-          asana-task-name: ${{ github.event.pull_request.title }}
-          asana-task-description: ${{ github.event.pull_request.body }}
+          asana-task-name: '${{ github.events.repository.name}}: ${{ github.event.pull_request.title }}'
+          asana-task-description: |
+            ${{ github.event.pull_request.body }}
+            source: https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/pull/${{ github.event.pull_request.number }}

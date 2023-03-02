@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Create Asana task
-        uses: honeycombio/gha-create-asana-task@v1.0.0
+        uses: honeycombio/gha-create-asana-task@v1.0.1
         with:
           asana-secret: ${{ secrets.ASANA_PAT }}
           asana-workspace-id: ${{ secrets.ASANA_WORKSPACE_ID }}

@@ -15,7 +15,7 @@ jobs:
           asana-secret: ${{ secrets.ASANA_SECRET }}
       - name: Create task if not found
         if: ${{ !contains(steps.postAttachment.outputs.status, '201') }}
-        uses: honeycombio/gha-create-asana-task@v1.0.0
+        uses: honeycombio/gha-create-asana-task@v1.0.1
         with:
           asana-secret: ${{ secrets.ASANA_PAT }}
           asana-workspace-id: ${{ secrets.ASANA_WORKSPACE_ID }}

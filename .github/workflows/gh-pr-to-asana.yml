@@ -21,6 +21,7 @@ jobs:
           asana-workspace-id: ${{ secrets.ASANA_WORKSPACE_ID }}
           asana-project-id: ${{ secrets.ASANA_PROJECT_ID }}
           asana-section-id: ${{ secrets.ASANA_SECTION_ID }}
+          asana-tags: '["1203366051961930", "1170327382493643"]' # adds the tags interrupt and oncall
           asana-task-name: '${{ github.events.repository.name}}: ${{ github.event.pull_request.title }}'
           asana-task-description: |
             ${{ github.event.pull_request.body }}

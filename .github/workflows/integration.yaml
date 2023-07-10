@@ -35,7 +35,7 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          STEP_ID=smoke-test
+          STEP_ID=smoke-test-sleep-5
           echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
@@ -43,6 +43,10 @@ jobs:
       - run: |
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 
+      - run: |
+          STEP_ID=smoke-test-sleep-2
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |

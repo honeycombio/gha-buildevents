@@ -27,7 +27,6 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          status: ${{ job.status }}
 
       - name: Print contents of BUILDEVENT_FILE
         run: |

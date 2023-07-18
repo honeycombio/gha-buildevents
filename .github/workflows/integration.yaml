@@ -20,7 +20,7 @@ jobs:
       - name: Set trace-start
         id: set-trace-start
         run: |
-          echo ::set-output name=trace-start::$(date +%s)          
+          echo ::set-output name=trace-start::$(date +%s)
 
       - name: Buildevents
         uses: ./
@@ -46,6 +46,19 @@ jobs:
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
+  smoke-test-without-init-event:
+    name: Smoke test without init event
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          send-init-event: false
 
   matrix:
     name: Matrix

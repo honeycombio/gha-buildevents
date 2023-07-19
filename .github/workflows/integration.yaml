@@ -27,7 +27,6 @@ jobs:
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
-          status: ${{ job.status }}
 
       - name: Print contents of BUILDEVENT_FILE
         run: |
@@ -40,9 +39,6 @@ jobs:
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
-
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |

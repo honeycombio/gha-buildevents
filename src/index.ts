@@ -44,13 +44,15 @@ async function run(): Promise<void> {
     })
 
     // create a first step to time installation of buildevents
-    const initStepComponents = ['gha-buildevents_init', util.getEnv('GITHUB_JOB'), core.getInput('matrix-key')]
-    await buildevents.step(
-      traceId,
-      util.randomInt(2 ** 32).toString(),
-      buildStart.toString(),
-      util.replaceSpaces(initStepComponents.filter(value => value).join('-'))
-    )
+    if (core.getInput('send-init-event').toUpperCase() == 'TRUE') {
+      const initStepComponents = ['gha-buildevents_init', util.getEnv('GITHUB_JOB'), core.getInput('matrix-key')]
+      await buildevents.step(
+        traceId,
+        util.randomInt(2 ** 32).toString(),
+        buildStart.toString(),
+        util.replaceSpaces(initStepComponents.filter(value => value).join('-'))
+      )
+    }
 
     core.info('Init done! buildevents is now available on the path.')
 

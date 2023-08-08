@@ -25,6 +25,10 @@ inputs:
   job-status:
     description: Deprecated value - please use status instead
     deprecationMessage: job-status is now deprecated - please use status instead
+  send-init-event:
+    default: "true"
+    description: (true/false) Whether to send an event representing the setup of this action.
+    required: false
 
 # outputs
 

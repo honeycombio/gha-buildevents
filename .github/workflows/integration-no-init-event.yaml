@@ -99,3 +99,4 @@ jobs:
           #           as status of the trace. Must always be ${{ job.status }}.
           status: ${{ env.WORKFLOW_CONCLUSION }}
           trace-start: ${{ needs.smoke-test-no-init-event.outputs.trace-start}}
+          send-init-event: false

@@ -1,4 +1,4 @@
-name: Integration
+name: Integration No Init Event
 
 on:
   push:

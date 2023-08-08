@@ -16,7 +16,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ### 📣 Adopting version 2.0.0
 
-- The input field `job-status` has been renamed to `status`. This is no longer required in every job. This was done because status can now be job status or workflow status. 
+- The input field `job-status` has been renamed to `status`. This is no longer required in every job. This was done because status can now be job status or workflow status.
   We still support job-status but will give a warning that it is deprecated and encourage the switch to the status field.
 
 - `status` is no longer required in every job because including the `status` field ends a trace. For multi job workflows this is only required as part of the last job or the job that will end the trace.
@@ -60,7 +60,7 @@ In the **FIRST JOB**
 ```yaml
 the-job-that-runs-first:
   runs-on: ubuntu-latest
-  
+
   steps:
     - name: Set trace-start
       id: set-trace-start
@@ -80,7 +80,7 @@ the-job-that-runs-first:
 
   # ... the rest of your job ...
   outputs:
-      trace-start: ${{ steps.set-trace-start.outputs.trace-start }} 
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
 # ... Job 2 ...
 ```
@@ -105,7 +105,7 @@ end-trace:
     with:
       # Required: a Honeycomb API key - needed to send traces.
       apikey: ${{ secrets.BUILDEVENT_APIKEY }}
-      
+
       # Required: the Honeycomb dataset to send traces to.
       dataset: gha-buildevents_integration
 
@@ -113,11 +113,11 @@ end-trace:
         # as status of the trace.
         # Note: in V1 this was called job-status which has been deprecated
       status: ${{ env.WORKFLOW_CONCLUSION }}
-      
+
       # Optional: trace-start, this will be used in the post section and sent
       # to calculate duration of the trace. In multi job workflows, set on the final job of a workflow. Not necessary for single job workflows
       trace-start: ${{ needs.build.outputs.trace-start}}
-      
+
       # Optional: this should only be used in combination with matrix builds. Set
       # this to a value uniquely describing each matrix configuration.
       matrix-key: ${{ matrix.value }}
@@ -129,12 +129,13 @@ end-trace:
 
 ### Inputs
 
-Name         | Required | Description                                          | Type
--------------|----------|------------------------------------------------------|-------
-`apikey`     | yes      | API key used to communicate with the Honeycomb API.  | string
-`dataset`    | yes      | Honeycomb dataset to use.                            | string
-`status`     | yes      | The job or workflow status                           | string
-`matrix-key` | no       | Set this to a key unique for this matrix cell.       | string
+Name              | Required | Description                                             | Type
+------------------|----------|---------------------------------------------------------|-------
+`apikey`          | yes      | API key used to communicate with the Honeycomb API.     | string
+`dataset`         | yes      | Honeycomb dataset to use.                               | string
+`status`          | yes      | The job or workflow status                              | string
+`matrix-key`      | no       | Set this to a key unique for this matrix cell.          | string
+`send-init-event` | no       | Whether to send an event representing the action setup. | string
 
 Additionally, the following environment variable will be read:
 

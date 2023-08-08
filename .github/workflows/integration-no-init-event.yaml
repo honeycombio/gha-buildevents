@@ -66,6 +66,7 @@ jobs:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
           dataset: gha-buildevents_integration
           matrix-key: ${{ matrix.value }}
+          send-init-event: false
 
       - run: |
           STEP_ID=matrix-${{ matrix.value }}

@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set trace-start
         id: set-trace-start
@@ -57,7 +57,7 @@ jobs:
         value: [valueA, valueB]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Buildevents
         uses: ./
@@ -83,7 +83,7 @@ jobs:
     needs: [smoke-test, matrix]
     if: ${{ always() }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: technote-space/workflow-conclusion-action@v3
       - name: Buildevents
         uses: ./

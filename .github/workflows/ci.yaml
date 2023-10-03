@@ -19,7 +19,7 @@ jobs:
           dataset: gha-buildevents_integration
           status: ${{ job.status }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - run: |
           STEP_ID="install dependencies"

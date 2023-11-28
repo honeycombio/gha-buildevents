@@ -20,7 +20,7 @@ async function run(): Promise<void> {
     const apikey = core.getInput('apikey', { required: true })
     core.setSecret(apikey)
     // defaults to api.honeycomb.io
-    const apihost = core.getInput('apihost') !== '' ? core.getInput('apihost') : 'https://api.honeycomb.io'
+    const apihost = core.getInput('apihost')
     const dataset = core.getInput('dataset', { required: true })
 
     await buildevents.install(apikey, apihost, dataset)

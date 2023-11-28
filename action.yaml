@@ -13,6 +13,7 @@ inputs:
   apihost:
     description: Defaults to https://api.honeycomb.io
     required: false
+    default: https://api.honeycomb.io
   dataset:
     description: The Honeycomb dataset to send traces to.
     required: true

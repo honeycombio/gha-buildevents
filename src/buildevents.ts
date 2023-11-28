@@ -7,7 +7,7 @@ import * as tc from '@actions/tool-cache'
 import * as logfmt from 'logfmt'
 import * as util from './util'
 
-export async function install(apikey: string, apiHost: string, dataset: string): Promise<void> {
+export async function install(apikey: string, apihost: string, dataset: string): Promise<void> {
   core.info('Downloading and installing buildevents')
 
   const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/' + util.constructExecutableName()
@@ -24,7 +24,7 @@ export async function install(apikey: string, apiHost: string, dataset: string):
   core.addPath(path.dirname(toolPath))
 
   util.setEnv('BUILDEVENT_APIKEY', apikey)
-  util.setEnv('BUILDEVENT_APIHOST', apiHost)
+  util.setEnv('BUILDEVENT_APIHOST', apihost)
   util.setEnv('BUILDEVENT_DATASET', dataset)
   util.setEnv('BUILDEVENT_CIPROVIDER', 'gha-buildevents')
 }

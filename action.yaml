@@ -10,6 +10,10 @@ inputs:
   apikey:
     description: A Honeycomb API key - needed to send traces.
     required: true
+  apihost:
+    description: Defaults to https://api.honeycomb.io
+    required: false
+    default: https://api.honeycomb.io
   dataset:
     description: The Honeycomb dataset to send traces to.
     required: true

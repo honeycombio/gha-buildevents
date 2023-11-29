@@ -48,7 +48,7 @@ const io = __importStar(__nccwpck_require__(7436));
 const tc = __importStar(__nccwpck_require__(7784));
 const logfmt = __importStar(__nccwpck_require__(5578));
 const util = __importStar(__nccwpck_require__(4024));
-function install(apikey, dataset) {
+function install(apikey, apihost, dataset) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info('Downloading and installing buildevents');
         const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/' + util.constructExecutableName();
@@ -61,6 +61,7 @@ function install(apikey, dataset) {
         yield exec.exec(`chmod +x ${toolPath}`);
         core.addPath(path.dirname(toolPath));
         util.setEnv('BUILDEVENT_APIKEY', apikey);
+        util.setEnv('BUILDEVENT_APIHOST', apihost);
         util.setEnv('BUILDEVENT_DATASET', dataset);
         util.setEnv('BUILDEVENT_CIPROVIDER', 'gha-buildevents');
     });
@@ -169,8 +170,10 @@ function run() {
             util.setEnv('TRACE_ID', traceId);
             const apikey = core.getInput('apikey', { required: true });
             core.setSecret(apikey);
+            // defaults to api.honeycomb.io
+            const apihost = core.getInput('apihost');
             const dataset = core.getInput('dataset', { required: true });
-            yield buildevents.install(apikey, dataset);
+            yield buildevents.install(apikey, apihost, dataset);
             buildevents.addFields({
                 // available environment variables
                 // https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables

@@ -9,3 +9,16 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      "@actions":
+        patterns:
+          - "@actions/*"
+      dev-dependencies:
+        patterns:
+          - "@types/node"
+          - "@typescript-eslint/*"
+          - "@vercel/ncc"
+          - "eslint"
+          - "js-yaml"
+          - "prettier"
+          - "typescript"

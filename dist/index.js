@@ -182,15 +182,15 @@ function run() {
                 'github.run_number': util.getEnv('GITHUB_RUN_NUMBER'),
                 'github.actor': util.getEnv('GITHUB_ACTOR'),
                 'github.repository': util.getEnv('GITHUB_REPOSITORY'),
-                'github.repository_owner': util.getEnv('GITHUB_REPOSITORY_OWNER'),
+                'github.repository_owner': util.getEnv('GITHUB_REPOSITORY_OWNER'), // undocumented
                 'github.event_name': util.getEnv('GITHUB_EVENT_NAME'),
                 'github.sha': util.getEnv('GITHUB_SHA'),
                 'github.ref': util.getEnv('GITHUB_REF'),
                 'github.head_ref': util.getEnv('GITHUB_HEAD_REF'),
                 'github.base_ref': util.getEnv('GITHUB_BASE_REF'),
-                'github.job': util.getEnv('GITHUB_JOB'),
+                'github.job': util.getEnv('GITHUB_JOB'), // undocumented
                 'github.matrix-key': core.getInput('matrix-key'),
-                'runner.os': util.getEnv('RUNNER_OS'),
+                'runner.os': util.getEnv('RUNNER_OS'), // undocumented
                 'meta.source': 'gha-buildevents'
             });
             // create a first step to time installation of buildevents
@@ -899,7 +899,7 @@ class OidcClient {
                 .catch(error => {
                 throw new Error(`Failed to get ID Token. \n 
         Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
+        Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
             if (!id_token) {
@@ -5790,7 +5790,7 @@ exports.stringify = function(data){
     var needs_escaping = value.indexOf('"') > -1 || value.indexOf("\\") > -1;
 
     if(needs_escaping) value = value.replace(/["\\]/g, '\\$&');
-    if(needs_quoting) value = '"' + value + '"';
+    if(needs_quoting || needs_escaping) value = '"' + value + '"';
     if(value === '' && !is_null) value = '""';
 
     line += key + '=' + value + ' ';

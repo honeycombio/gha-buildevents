@@ -10,8 +10,6 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 
 ### ⚠️ Limitations
 
-- this action only works on Linux hosts (though technically support could be added for other platforms)
-
 - if downloading or executing buildevents fails, the entire job will fail
 
 ### 📣 Adopting version 2.0.0

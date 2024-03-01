@@ -44,6 +44,9 @@ export function constructExecutableName(): string {
     case 'linux':
       processPlatform = 'linux'
       break
+    case 'win32':
+      processPlatform = 'windows'
+      break
     default:
       throw new Error(`Unsupported platform ${process.platform}'`)
   }

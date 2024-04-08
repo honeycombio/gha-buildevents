@@ -63,7 +63,7 @@ the-job-that-runs-first:
     - name: Set trace-start
       id: set-trace-start
       run: |
-        echo ::set-output name=trace-start::$(date +%s)
+        echo "trace-start=$(date +%s)" >> $GITHUB_OUTPUT
     - uses: honeycombio/gha-buildevents@v2
       with:
         # Required: a Honeycomb API key - needed to send traces.

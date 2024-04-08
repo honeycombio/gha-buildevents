@@ -20,7 +20,7 @@ jobs:
       - name: Set trace-start
         id: set-trace-start
         run: |
-          echo ::set-output name=trace-start::$(date +%s)
+          echo "trace-start=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Buildevents
         uses: ./

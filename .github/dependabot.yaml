@@ -5,14 +5,7 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "monthly"
     groups:
-      "@actions":
-        patterns:
-          - "@actions/*"
       dev-dependencies:
         patterns:
           - "@types/node"
@@ -22,3 +15,12 @@ updates:
           - "js-yaml"
           - "prettier"
           - "typescript"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      "@actions":
+        patterns:
+          - "@actions/*"

@@ -35,13 +35,13 @@
     "logfmt": "^1.4.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.5.0",
-    "@types/node": "^20.12.4",
-    "@typescript-eslint/parser": "^7.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@types/node": "^22.0.2",
+    "@typescript-eslint/parser": "^8.0.0",
     "@vercel/ncc": "^0.38.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.8.0",
     "js-yaml": "^4.0.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.3"
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
   }
 }

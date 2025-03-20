@@ -97,6 +97,8 @@ end-trace:
   runs-on: ubuntu-latest
   needs: [the-job-that-runs-first, job2]
   if: ${{ always() }}
+  permissions:
+    actions: read
   steps:
   - uses: technote-space/workflow-conclusion-action@v3
   - uses: honeycombio/gha-buildevents@v2

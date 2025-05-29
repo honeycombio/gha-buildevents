@@ -37,6 +37,7 @@ jobs:
           if [[ ! $TRACE_ID =~ ^[a-f0-9]{32}$ ]]; then
             echo "TRACE_ID is not a 128-bit hex string!" >&2
             exit 1
+          fi
 
   end-trace:
     name: End Trace

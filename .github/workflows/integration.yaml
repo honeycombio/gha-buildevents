@@ -97,23 +97,3 @@ jobs:
           #           as status of the trace. Must always be ${{ job.status }}.
           status: ${{ env.WORKFLOW_CONCLUSION }}
           trace-start: ${{ needs.smoke-test.outputs.trace-start}}
-
-  otel-traceid:
-    name: OpenTelemetry TraceID
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Buildevents with otel-traceid
-        uses: ./
-        with:
-          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
-          dataset: gha-buildevents_integration
-          status: ${{ job.status }}
-          otel-traceid: true
-      - name: Print TRACE_ID
-        run: |
-          echo "TRACE_ID: $TRACE_ID"
-          if [[ ! $TRACE_ID =~ ^[a-f0-9]{32}$ ]]; then
-            echo "TRACE_ID is not a 128-bit hex string!" >&2
-            exit 1
-          fi

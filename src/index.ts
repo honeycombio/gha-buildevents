@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as buildevents from './buildevents.js'
 import * as util from './util.js'
+import md5 from 'md5'
 
 async function run(): Promise<void> {
   try {
@@ -112,5 +113,11 @@ function buildTraceId(): string {
     util.getEnv('GITHUB_RUN_NUMBER'),
     util.getEnv('GITHUB_RUN_ATTEMPT')
   ]
-  return util.replaceSpaces(traceComponents.filter(value => value).join('-'))
+  const rawTraceId = util.replaceSpaces(traceComponents.filter(value => value).join('-'))
+  const otelTraceIdFlag = core.getInput('otel-traceid').toLowerCase() === 'true'
+  if (otelTraceIdFlag) {
+    // md5 returns a 32-char hex string (128 bits)
+    return md5(rawTraceId)
+  }
+  return rawTraceId
 }

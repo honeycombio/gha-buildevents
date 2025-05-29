@@ -1,0 +1,64 @@
+name: Integration OpenTelemetry TraceID
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+  schedule:
+    - cron: "0 * * * *" # run once every hour
+
+# we don't need many github_token permissions for this workflow
+permissions:
+  contents: read
+
+jobs:
+  otel-traceid:
+    name: OpenTelemetry TraceID
+    runs-on: ubuntu-latest
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo "trace-start=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Buildevents with otel-traceid
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          status: ${{ job.status }}
+          otel-traceid: true
+
+      - name: Print TRACE_ID
+        run: |
+          echo "TRACE_ID: $TRACE_ID"
+          if [[ ! $TRACE_ID =~ ^[a-f0-9]{32}$ ]]; then
+            echo "TRACE_ID is not a 128-bit hex string!" >&2
+            exit 1
+          fi
+
+  end-trace:
+    name: End Trace
+    runs-on: ubuntu-latest
+    needs: [otel-traceid]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: technote-space/workflow-conclusion-action@v3
+      - name: Set status output
+        id: set-status
+        run: |
+          echo "status=$WORKFLOW_CONCLUSION" >> $GITHUB_OUTPUT
+      - name: Buildevents End Trace with otel-traceid
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          status: ${{ steps.set-status.outputs.status }}
+          trace-start: ${{ needs.otel-traceid.outputs.trace-start }}
+          otel-traceid: true

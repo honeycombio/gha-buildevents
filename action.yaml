@@ -33,6 +33,10 @@ inputs:
     default: "true"
     description: (true/false) Whether to send an event representing the setup of this action.
     required: false
+  otel-traceid:
+    description: 'If true, generate the trace ID as a 128-bit hex string compatible with OpenTelemetry by MD5 hashing the existing predictable trace ID.'
+    required: false
+    default: 'false'
 
 # outputs
 

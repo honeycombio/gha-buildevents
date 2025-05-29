@@ -9,6 +9,7 @@ on:
   schedule:
     - cron: "0 * * * *" # run once every hour
 
+# we don't need many github_token permissions for this workflow
 permissions:
   contents: read
 

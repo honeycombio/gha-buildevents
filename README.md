@@ -127,15 +127,29 @@ end-trace:
 
 `gha-buildevents` is a _wrapping action_. This means it has a post section which will run at the end of the build, after all other steps. In this final step the trace is finalized using `buildevents build`. Since this step runs always, even if the job failed, you don't have to worry about traces not being sent.
 
+### OpenTelemetry-compatible Trace IDs
+
+A new input, `otel-traceid`, is available:
+
+- If set to `true`, the action will generate the trace ID as a 128-bit hex string compatible with OpenTelemetry. This is done by MD5 hashing the existing predictable trace ID (which is based on repository, workflow, run number, and run attempt). This ensures compatibility with OpenTelemetry trace ID requirements while maintaining repeatability.
+- If not set or set to `false`, the original trace ID format is used.
+
+**Example usage:**
+```yaml
+with:
+  otel-traceid: true
+```
+
 ### Inputs
 
-Name              | Required | Description                                             | Type
-------------------|----------|---------------------------------------------------------|-------
-`apikey`          | yes      | API key used to communicate with the Honeycomb API.     | string
-`dataset`         | yes      | Honeycomb dataset to use.                               | string
-`status`          | yes      | The job or workflow status                              | string
-`matrix-key`      | no       | Set this to a key unique for this matrix cell.          | string
-`send-init-event` | no       | Whether to send an event representing the action setup. | string
+Name              | Required | Description                                                                                      | Type
+------------------|----------|--------------------------------------------------------------------------------------------------|-------
+`apikey`          | yes      | API key used to communicate with the Honeycomb API.                                              | string
+`dataset`         | yes      | Honeycomb dataset to use.                                                                        | string
+`status`          | yes      | The job or workflow status                                                                       | string
+`matrix-key`      | no       | Set this to a key unique for this matrix cell.                                                   | string
+`send-init-event` | no       | Whether to send an event representing the action setup.                                          | string
+`otel-traceid`    | no       | If true, generate the trace ID as a 128-bit hex string compatible with OpenTelemetry by MD5 hashing the existing predictable trace ID. | string
 
 Additionally, the following environment variable will be read:
 
@@ -151,6 +165,8 @@ No outputs are set, but the following environment variables are set:
 <owner>/<repo>-<workflow>-<job>-<run number>-<run attempt>
 ```
 For example: `honeycombio/gha-buildevents-Integration-smoke-test-20144-1`.
+
+If the `otel-traceid` input is set to `true`, the `TRACE_ID` environment variable will instead be a 128-bit hex string (MD5 hash of the above formatted trace ID), compatible with OpenTelemetry trace ID requirements.
 
 ## Example
 

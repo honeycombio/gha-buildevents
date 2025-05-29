@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "0 * * * *" # run once every hour
 
+permissions:
+  contents: read
+
 jobs:
   otel-traceid:
     name: OpenTelemetry TraceID

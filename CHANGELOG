@@ -1,5 +1,24 @@
 # gha-buildevents changelog
 
+## v3.1.0 [2025-05-29]
+
+### Enhancements
+
+- feat(gha-buildevents): add otel-traceid option which md5 hashes the existing traceid format | [rylee fox]
+
+### Maintenance
+
+- Add missing permission on End trace job (#312) | [Thibaud Courtoison]
+- maint: update repo for pipeline team ownership (#306) | [Jamie Danielson]
+- chore: change codeowners to pipeline (#301) | [Brooke Sargent]
+- build(deps): bump honeycombio/gha-buildevents from 2 to 3 (#290) | [dependabot[bot]]
+- chore: don't use ::set-output (#299) | [Brooke Sargent]
+- build(deps-dev): bump @typescript-eslint/parser from 7.1.0 to 7.5.0 (#295) | [dependabot[bot]]
+- build(deps-dev): bump @typescript-eslint/eslint-plugin from 7.1.0 to 7.5.0 (#296) | [dependabot[bot]]
+- build(deps-dev): bump @types/node from 20.11.24 to 20.12.4 (#297) | [dependabot[bot]]
+- build(deps-dev): bump typescript from 5.3.3 to 5.4.3 (#292) | [dependabot[bot]]
+
+
 ## v3.0.0 [2024-03-01]
 
 v3 requires the `node20` action runtime.

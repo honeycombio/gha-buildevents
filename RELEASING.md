@@ -17,7 +17,7 @@ Follow these steps to create a new release:
   - `git log --pretty='%C(green)%d%Creset- %s | [%an](https://github.com/)'`
 - Commit changes, push, and open a release preparation pull request for review.
 - Once the pull request is merged, fetch the updated `main` branch.
-- Apply a tag for the new version on the merged commit (e.g. `git tag -a v2.3.1 -m "v2.3.1"`)
+- Apply a tag for the new version on the merged commit (e.g. `git tag --annotate v2.3.1 --message "v2.3.1"`)
 - Push the tag upstream (this will kick off the release pipeline in CI) e.g. `git push origin v2.3.1`
 - Create a new release from [the Releases page](https://github.com/honeycombio/gha-buildevents/releases)
   - check the "Publish this release to the GitHub Marketplace" box
@@ -25,11 +25,15 @@ Follow these steps to create a new release:
   - release title matches version number
   - copy and paste the changelog entry for this version into the release description
 - Update the major version tag so it points to the latest release
-  - with the latest release checked out locally:
+  - example in the steps above is releasing v2.3.1, so the major version tag to update would be v2
 
 ```shell
-git tag -fa v1 -m "Update v1 tag"
-git push origin v1 --force
+# checkout release-tagged commit
+git checkout v2.3.1
+# create a new v2 tag pointing to this commit, replacing any previous v2 tag
+git tag --force --annotate v2 --message "Update v2 tag"
+# push the new v2 tag to the repo, replacing any previous v2 tag
+git push origin v2 --force
 ```
 
 - Review the tags on [the Tags page](https://github.com/honeycombio/gha-buildevents/tags), including the commit they reference

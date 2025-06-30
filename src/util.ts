@@ -37,6 +37,7 @@ export function constructExecutableName(): string {
   }
 
   let processPlatform = ''
+  let platformExtension = ''
   switch (process.platform) {
     case 'darwin':
       processPlatform = 'darwin'
@@ -46,10 +47,11 @@ export function constructExecutableName(): string {
       break
     case 'win32':
       processPlatform = 'windows'
+      platformExtension = '.exe'
       break
     default:
       throw new Error(`Unsupported platform ${process.platform}'`)
   }
 
-  return 'buildevents-' + processPlatform + '-' + processArch
+  return 'buildevents-' + processPlatform + '-' + processArch + platformExtension
 }

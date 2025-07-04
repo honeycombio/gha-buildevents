@@ -335,6 +335,7 @@ function constructExecutableName() {
             throw new Error(`Unsupported arch ${process.arch}'`);
     }
     let processPlatform = '';
+    let platformExtension = '';
     switch (process.platform) {
         case 'darwin':
             processPlatform = 'darwin';
@@ -344,11 +345,12 @@ function constructExecutableName() {
             break;
         case 'win32':
             processPlatform = 'windows';
+            platformExtension = '.exe';
             break;
         default:
             throw new Error(`Unsupported platform ${process.platform}'`);
     }
-    return 'buildevents-' + processPlatform + '-' + processArch;
+    return 'buildevents-' + processPlatform + '-' + processArch + platformExtension;
 }
 exports.constructExecutableName = constructExecutableName;
 

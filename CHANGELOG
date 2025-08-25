@@ -1,5 +1,16 @@
 # gha-buildevents changelog
 
+## v3.1.1 [2025-08-25]
+
+### Maintenance
+
+- build(deps-dev): bump braces from 3.0.2 to 3.0.3 (#309) | [dependabot[bot]]
+- docs: expand CLI options for tagging in RELEASING.md (#316) | [@robbkidd](https://github.com/robbkidd)
+
+### Bugfixes
+
+- fix: include .exe extension for links to Windows builds (#317) | [@robbkidd](https://github.com/robbkidd)
+
 ## v3.1.0 [2025-05-29]
 
 ### Enhancements

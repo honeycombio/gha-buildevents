@@ -55,10 +55,13 @@ function install(apikey, apihost, dataset) {
         core.info(`Downloading from ${url}`);
         const downloadPath = yield tc.downloadTool(url);
         // rename downloaded binary - downloadPath is similar to a UUID by default
-        const toolPath = path.join(path.dirname(downloadPath), 'buildevents');
+        const exeName = process.platform === 'win32' ? 'buildevents.exe' : 'buildevents';
+        const toolPath = path.join(path.dirname(downloadPath), exeName);
         yield io.mv(downloadPath, toolPath);
-        // make exectuable and add to path
-        yield exec.exec(`chmod +x ${toolPath}`);
+        // make executable and add to path
+        if (process.platform !== 'win32') {
+            yield exec.exec(`chmod +x ${toolPath}`);
+        }
         core.addPath(path.dirname(toolPath));
         util.setEnv('BUILDEVENT_APIKEY', apikey);
         util.setEnv('BUILDEVENT_APIHOST', apihost);

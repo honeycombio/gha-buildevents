@@ -8,19 +8,24 @@ updates:
     groups:
       dev-dependencies:
         patterns:
-          - "@types/node"
+          - "@types/*"
           - "@typescript-eslint/*"
           - "@vercel/ncc"
           - "eslint"
           - "js-yaml"
           - "prettier"
           - "typescript"
+      production-dependencies:
+        patterns:
+          - "@actions/*"
+          - "logfmt"
+          - "md5"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
     groups:
-      "@actions":
+      github-actions:
         patterns:
-          - "@actions/*"
+          - "*"

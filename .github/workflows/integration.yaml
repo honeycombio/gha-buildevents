@@ -46,6 +46,40 @@ jobs:
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
+  smoke-test-windows:
+    name: Smoke test (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+      - name: Print contents of BUILDEVENT_FILE
+        shell: pwsh
+        run: |
+          echo "Contents of BUILDEVENT_FILE:"
+          Get-Content $env:BUILDEVENT_FILE
+
+      - shell: pwsh
+        run: |
+          $env:STEP_ID = "smoke-test-windows"
+          echo "STEP_ID=$($env:STEP_ID)" >> $env:GITHUB_ENV
+          echo "STEP_START=$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())" >> $env:GITHUB_ENV
+      - shell: pwsh
+        run: |
+          buildevents cmd $env:TRACE_ID $env:STEP_ID sleep --shell powershell.exe -- "Start-Sleep -Seconds 5"
+      - shell: pwsh
+        run: |
+          buildevents cmd $env:TRACE_ID $env:STEP_ID 'sleep some more' --shell powershell.exe -- "Start-Sleep -Seconds 2"
+      - shell: pwsh
+        run: |
+          buildevents step $env:TRACE_ID $env:STEP_ID $env:STEP_START $env:STEP_ID
+
   matrix:
     name: Matrix
     runs-on: ubuntu-latest

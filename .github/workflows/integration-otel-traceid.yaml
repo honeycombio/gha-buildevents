@@ -46,6 +46,9 @@ jobs:
   end-trace:
     name: End Trace
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     needs: [otel-traceid]
     steps:
       - uses: actions/checkout@v4

@@ -9,6 +9,9 @@ on:
   schedule:
     - cron: "0 * * * *" # run once every hour
 
+permissions:
+  contents: read
+
 jobs:
   smoke-test-no-init-event:
     name: Smoke test
@@ -82,6 +85,9 @@ jobs:
   end-trace:
     name: End Trace
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     needs: [smoke-test-no-init-event, matrix]
     if: ${{ always() }}
     steps:

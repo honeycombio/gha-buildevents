@@ -1,5 +1,10 @@
 name: Apply project labels
 on: [issues, pull_request_target, label]
+
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   apply-labels:
     runs-on: ubuntu-latest

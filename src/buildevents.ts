@@ -5,7 +5,7 @@ import * as exec from '@actions/exec'
 import * as io from '@actions/io'
 import * as tc from '@actions/tool-cache'
 import * as logfmt from 'logfmt'
-import * as util from './util'
+import * as util from './util.js'
 
 export async function install(apikey: string, apihost: string, dataset: string): Promise<void> {
   core.info('Downloading and installing buildevents')

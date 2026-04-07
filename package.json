@@ -2,6 +2,7 @@
   "name": "gha-buildevents",
   "version": "3.1.1",
   "description": "GitHub Actions to integrate Honeycomb's buidlevents tool into your workflows",
+  "type": "module",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",

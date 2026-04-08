@@ -1,6 +1,6 @@
 {
   "name": "gha-buildevents",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "GitHub Actions to integrate Honeycomb's buidlevents tool into your workflows",
   "type": "module",
   "main": "lib/index.js",

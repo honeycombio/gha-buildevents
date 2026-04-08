@@ -1,5 +1,25 @@
 # gha-buildevents changelog
 
+## v4.0.0 [2026-04-08]
+
+v4 requires the `node24` action runtime. GitHub Action runners must have Node.js
+24 available.
+
+### Bugfixes
+
+- fix: preserve .exe extension when installing buildevents on Windows (#334) | [@muhammadarslan-techsol](https://github.com/muhammadarslan-techsol), [@robbkidd](https://github.com/robbkidd)
+
+### Maintenance
+
+- maint: upgrade to Node 24 (#333) | [@robbkidd](https://github.com/robbkidd)
+- chore: clean up CI workflows and dependabot config (#335) | [@robbkidd](https://github.com/robbkidd)
+- ci: fix permissions on workflows (#341) | [@codeboten](https://github.com/codeboten)
+- maint: less noisy dependabot groupings (#342) | [@robbkidd](https://github.com/robbkidd)
+- build(deps-dev): bump the patch-and-minor group across 1 directory with 4 updates (#343) | [dependabot[bot]]
+- build(deps): bump the major-actions group across 1 directory with 4 updates (#344) | [dependabot[bot]]
+- build(deps-dev): bump the major-typescript-eslint group across 1 directory with 2 updates (#345) | [dependabot[bot]]
+- build(deps-dev): bump @types/node from 24.12.2 to 25.3.5 in the major-types group (#346) | [dependabot[bot]]
+
 ## v3.1.1 [2025-08-25]
 
 ### Maintenance

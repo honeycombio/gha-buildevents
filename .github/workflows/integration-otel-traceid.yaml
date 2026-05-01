@@ -20,7 +20,7 @@ jobs:
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set trace-start
         id: set-trace-start
@@ -51,7 +51,7 @@ jobs:
       contents: read
     needs: [otel-traceid]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: technote-space/workflow-conclusion-action@v3
       - name: Set status output
         id: set-status

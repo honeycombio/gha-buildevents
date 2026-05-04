@@ -1,0 +1,77 @@
+name: Integration Multi-Job Failure
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  succeeding-job:
+    name: Expected Success
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set trace-start
+        id: set-trace-start
+        run: |
+          echo "trace-start=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+      - run: |
+          STEP_ID="Expected Success"
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - name: Expected Success
+        run: buildevents cmd $TRACE_ID "$STEP_ID" 'succeeding step' -- echo "success"
+
+    outputs:
+      trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
+
+  failing-job:
+    name: Expected Failure
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+
+      - run: |
+          STEP_ID="Expected Failure"
+          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
+          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+      - name: Expected Failure
+        run: buildevents cmd $TRACE_ID "$STEP_ID" 'failing step' -- false
+
+  end-trace:
+    name: End Trace
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: [succeeding-job, failing-job]
+    if: ${{ always() }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Buildevents
+        uses: ./
+        with:
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+          dataset: gha-buildevents_integration
+          status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'cancelled') && 'cancelled' || 'success' }}
+          trace-start: ${{ needs.succeeding-job.outputs.trace-start }}

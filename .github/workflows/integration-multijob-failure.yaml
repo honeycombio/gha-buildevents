@@ -35,6 +35,9 @@ jobs:
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Expected Success
         run: buildevents cmd $TRACE_ID "$STEP_ID" 'succeeding step' -- echo "success"
+      - name: Send parent span for these steps
+        if: always()
+        run: buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
 
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
@@ -58,6 +61,9 @@ jobs:
           echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
       - name: Expected Failure
         run: buildevents cmd $TRACE_ID "$STEP_ID" 'failing step' -- false
+      - name: Send parent span for these steps
+        run: buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
+        if: always()
 
   end-trace:
     name: End Trace

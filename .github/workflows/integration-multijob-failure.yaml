@@ -45,6 +45,7 @@ jobs:
   failing-job:
     name: Expected Failure
     runs-on: ubuntu-latest
+    needs: [succeeding-job] # ensures the job that starts the trace happens first
 
     steps:
       - uses: actions/checkout@v6

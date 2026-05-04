@@ -45,7 +45,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
-          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
@@ -82,7 +82,7 @@ jobs:
           buildevents cmd $env:TRACE_ID $env:STEP_ID 'sleep some more' --shell powershell.exe -- "Start-Sleep -Seconds 2"
       - shell: pwsh
         run: |
-          echo "job.status=${{ job.status }}" >> $env:BUILDEVENT_FILE
+          "`njob.status=${{ job.status }}" | Out-File -Append -NoNewline -Encoding utf8 $env:BUILDEVENT_FILE
           buildevents step $env:TRACE_ID $env:STEP_ID $env:STEP_START $env:STEP_ID
 
   matrix:
@@ -114,7 +114,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
-          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 
   end-trace:

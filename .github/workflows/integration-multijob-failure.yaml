@@ -38,7 +38,7 @@ jobs:
       - name: Send parent span for these steps
         if: always()
         run: |
-          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
 
     outputs:
@@ -67,7 +67,7 @@ jobs:
       - name: Send parent span for these steps
         if: always()
         run: |
-          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
 
   end-trace:

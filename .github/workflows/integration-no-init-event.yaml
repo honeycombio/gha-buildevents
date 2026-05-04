@@ -46,6 +46,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
       - run: |
+          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
@@ -80,6 +81,7 @@ jobs:
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
       - run: |
+          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 
   end-trace:

@@ -37,7 +37,9 @@ jobs:
         run: buildevents cmd $TRACE_ID "$STEP_ID" 'succeeding step' -- echo "success"
       - name: Send parent span for these steps
         if: always()
-        run: buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
+        run: |
+          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
 
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
@@ -63,8 +65,10 @@ jobs:
       - name: Expected Failure
         run: buildevents cmd $TRACE_ID "$STEP_ID" 'failing step' -- false
       - name: Send parent span for these steps
-        run: buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
         if: always()
+        run: |
+          echo "job.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
 
   end-trace:
     name: End Trace

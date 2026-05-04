@@ -86,13 +86,11 @@ jobs:
     name: End Trace
     runs-on: ubuntu-latest
     permissions:
-      actions: read
       contents: read
     needs: [smoke-test-no-init-event, matrix]
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v6
-      - uses: technote-space/workflow-conclusion-action@v3
       - name: Buildevents
         uses: ./
         with:
@@ -103,6 +101,6 @@ jobs:
           dataset: gha-buildevents_integration
           # Required: the job status, this will be used in the post section and sent
           #           as status of the trace. Must always be ${{ job.status }}.
-          status: ${{ env.WORKFLOW_CONCLUSION }}
+          status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'cancelled') && 'cancelled' || 'success' }}
           trace-start: ${{ needs.smoke-test-no-init-event.outputs.trace-start}}
           send-init-event: false

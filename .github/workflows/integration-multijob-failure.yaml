@@ -65,7 +65,6 @@ jobs:
       - name: Expected Failure
         run: buildevents cmd $TRACE_ID "$STEP_ID" 'failing step' -- false
       - name: Send parent span for these steps
-        if: always()
         run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"

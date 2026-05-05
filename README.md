@@ -28,7 +28,7 @@ This GitHub Action instruments your workflows using [Honeycomb's buildevents too
 ### Single Job Workflow
 
 ```yaml
-- uses: honeycombio/gha-buildevents@v2
+- uses: honeycombio/gha-buildevents@v4
   with:
     # Required: a Honeycomb API key - needed to send traces.
     apikey: ${{ secrets.BUILDEVENT_APIKEY }}
@@ -71,7 +71,7 @@ jobs:
         id: set-trace-start
         run: |
           echo "trace-start=$(date +%s)" >> $GITHUB_OUTPUT
-      - uses: honeycombio/gha-buildevents@v2
+      - uses: honeycombio/gha-buildevents@v4
         with:
           # Required: a Honeycomb API key - needed to send traces.
           apikey: ${{ secrets.BUILDEVENT_APIKEY }}
@@ -87,7 +87,7 @@ jobs:
   job2:
     needs: [the-job-that-must-run-first] # to ensure first job actually runs first
     steps:
-      - uses: honeycombio/gha-buildevents@v2
+      - uses: honeycombio/gha-buildevents@v4
         with:
           apikey: ${{ secrets.BUILDEVENT_APIKEY }}
           dataset: gha-traces
@@ -105,7 +105,7 @@ jobs:
     needs: [the-job-that-must-run-first, job2, ...]
     if: ${{ always() }} # or else failures won't have a complete trace
     steps:
-    - uses: honeycombio/gha-buildevents@v2
+    - uses: honeycombio/gha-buildevents@v4
       with:
         # Required: a Honeycomb API key - needed to send traces.
         apikey: ${{ secrets.BUILDEVENT_APIKEY }}

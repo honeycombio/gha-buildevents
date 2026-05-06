@@ -38,18 +38,18 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          STEP_ID=smoke-test
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          JOB_ID=smoke-test
+          echo "JOB_ID=${JOB_ID}" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
+          buildevents cmd $TRACE_ID $JOB_ID sleep -- sleep 5
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
+          buildevents cmd $TRACE_ID $JOB_ID 'sleep some more' -- sleep 2
       - name: Send parent span for job
         if: ${{ always() }}
         run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+          buildevents step $TRACE_ID $JOB_ID $JOB_START $JOB_ID
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
@@ -75,18 +75,18 @@ jobs:
           send-init-event: false
 
       - run: |
-          STEP_ID=matrix-${{ matrix.value }}
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          JOB_ID=matrix-${{ matrix.value }}
+          echo "JOB_ID=${JOB_ID}" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
+          buildevents cmd $TRACE_ID $JOB_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
+          buildevents cmd $TRACE_ID $JOB_ID sleep -- sleep 2
       - name: Send parent span for job
         if: ${{ always() }}
         run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+          buildevents step $TRACE_ID $JOB_ID $JOB_START $JOB_ID
 
   end-trace:
     name: End Trace

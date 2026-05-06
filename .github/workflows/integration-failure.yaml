@@ -26,14 +26,14 @@ jobs:
           status: ${{ job.status }}
 
       - run: |
-          echo "STEP_ID=Expected Failure" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          echo "JOB_ID=Expected Failure" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - name: Sleepy Time
-        run: buildevents cmd $TRACE_ID "$STEP_ID" sleep -- sleep 1
+        run: buildevents cmd $TRACE_ID "$JOB_ID" sleep -- sleep 1
       - name: Expected Failure
         run: ./.github/scripts/test-be-failure
       - name: Send parent span for job
         if: always()
         run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
-          buildevents step $TRACE_ID "$STEP_ID" $STEP_START "$STEP_ID"
+          buildevents step $TRACE_ID "$JOB_ID" $JOB_START "$JOB_ID"

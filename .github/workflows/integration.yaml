@@ -37,15 +37,18 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          STEP_ID=smoke-test
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          JOB_ID=smoke-test
+          echo "JOB_ID=${JOB_ID}" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
+          buildevents cmd $TRACE_ID $JOB_ID sleep -- sleep 5
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+          buildevents cmd $TRACE_ID $JOB_ID 'sleep some more' -- sleep 2
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          buildevents step $TRACE_ID $JOB_ID $JOB_START $JOB_ID
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
@@ -70,18 +73,21 @@ jobs:
 
       - shell: pwsh
         run: |
-          $env:STEP_ID = "smoke-test-windows"
-          echo "STEP_ID=$($env:STEP_ID)" >> $env:GITHUB_ENV
-          echo "STEP_START=$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())" >> $env:GITHUB_ENV
+          $env:JOB_ID = "smoke-test-windows"
+          echo "JOB_ID=$($env:JOB_ID)" >> $env:GITHUB_ENV
+          echo "JOB_START=$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())" >> $env:GITHUB_ENV
       - shell: pwsh
         run: |
-          buildevents cmd $env:TRACE_ID $env:STEP_ID sleep --shell powershell.exe -- "Start-Sleep -Seconds 5"
+          buildevents cmd $env:TRACE_ID $env:JOB_ID sleep --shell powershell.exe -- "Start-Sleep -Seconds 5"
       - shell: pwsh
         run: |
-          buildevents cmd $env:TRACE_ID $env:STEP_ID 'sleep some more' --shell powershell.exe -- "Start-Sleep -Seconds 2"
-      - shell: pwsh
+          buildevents cmd $env:TRACE_ID $env:JOB_ID 'sleep some more' --shell powershell.exe -- "Start-Sleep -Seconds 2"
+      - name: Send parent span for job
+        if: ${{ always() }}
+        shell: pwsh
         run: |
-          buildevents step $env:TRACE_ID $env:STEP_ID $env:STEP_START $env:STEP_ID
+          "`njob.status=${{ job.status }}" | Out-File -Append -NoNewline -Encoding utf8 $env:BUILDEVENT_FILE
+          buildevents step $env:TRACE_ID $env:JOB_ID $env:JOB_START $env:JOB_ID
 
   matrix:
     name: Matrix
@@ -104,27 +110,28 @@ jobs:
           matrix-key: ${{ matrix.value }}
 
       - run: |
-          STEP_ID=matrix-${{ matrix.value }}
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          JOB_ID=matrix-${{ matrix.value }}
+          echo "JOB_ID=${JOB_ID}" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
+          buildevents cmd $TRACE_ID $JOB_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+          buildevents cmd $TRACE_ID $JOB_ID sleep -- sleep 2
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          buildevents step $TRACE_ID $JOB_ID $JOB_START $JOB_ID
 
   end-trace:
     name: End Trace
     runs-on: ubuntu-latest
     permissions:
-      actions: read
       contents: read
     needs: [smoke-test, matrix]
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v6
-      - uses: technote-space/workflow-conclusion-action@v3
       - name: Buildevents
         uses: ./
         with:
@@ -135,5 +142,5 @@ jobs:
           dataset: gha-buildevents_integration
           # Required: the job status, this will be used in the post section and sent
           #           as status of the trace. Must always be ${{ job.status }}.
-          status: ${{ env.WORKFLOW_CONCLUSION }}
+          status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'cancelled') && 'cancelled' || 'success' }}
           trace-start: ${{ needs.smoke-test.outputs.trace-start}}

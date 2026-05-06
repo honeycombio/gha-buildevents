@@ -11,11 +11,15 @@ permissions:
   contents: read
 
 jobs:
-  pack:
+  ci:
     name: CI
     runs-on: ubuntu-latest
 
     steps:
+      - name: Record job start
+        run: |
+          echo "JOB_ID=$(openssl rand -hex 8)" >> ${GITHUB_ENV}
+          echo "JOB_START=$(date +%s)" >> ${GITHUB_ENV}
       - uses: honeycombio/gha-buildevents@v4
         with:
           apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
@@ -24,39 +28,16 @@ jobs:
 
       - uses: actions/checkout@v6
 
-      - run: |
-          STEP_ID="install dependencies"
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: npm ci
-
-      - run: |
-          STEP_ID=lint
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: npm run lint
-
-      - run: |
-          STEP_ID=format-check
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: npm run format-check
-
-      - run: |
-          STEP_ID=build
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: npm run build
-
-      - run: |
-          STEP_ID=pack
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
-      - run: npm run pack
-
+      - run: buildevents cmd $TRACE_ID $JOB_ID 'install deps' -- npm ci
+      - run: buildevents cmd $TRACE_ID $JOB_ID 'lint' -- npm run lint
+      - run: buildevents cmd $TRACE_ID $JOB_ID 'format-check' -- npm run format-check
+      - run: buildevents cmd $TRACE_ID $JOB_ID 'build' -- npm run build
+      - run: buildevents cmd $TRACE_ID $JOB_ID 'pack' -- npm run pack
       - name: Verify no changes were made
         run: |
-          if ! git diff --quiet; then
-            echo "Changes detected! Please run 'npm run all' before committing code changes."
-            exit 1
-          fi
+          buildevents cmd $TRACE_ID $JOB_ID 'verify-no-changes' -- \
+            bash -c 'if ! git diff --quiet; then echo "Changes detected! Please run npm run all before committing code changes."; exit 1; fi'
+      - name: Send parent span for job
+        if: ${{ always() }} # to ensure parent span is sent when there are failed steps
+        run: |
+          buildevents step $TRACE_ID $JOB_ID $JOB_START 'CI'

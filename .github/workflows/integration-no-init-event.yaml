@@ -38,15 +38,18 @@ jobs:
           cat $BUILDEVENT_FILE
 
       - run: |
-          STEP_ID=smoke-test
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          JOB_ID=smoke-test
+          echo "JOB_ID=${JOB_ID}" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
+          buildevents cmd $TRACE_ID $JOB_ID sleep -- sleep 5
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+          buildevents cmd $TRACE_ID $JOB_ID 'sleep some more' -- sleep 2
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          buildevents step $TRACE_ID $JOB_ID $JOB_START $JOB_ID
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
 
@@ -72,27 +75,28 @@ jobs:
           send-init-event: false
 
       - run: |
-          STEP_ID=matrix-${{ matrix.value }}
-          echo "STEP_ID=${STEP_ID}" >> $GITHUB_ENV
-          echo "STEP_START=$(date +%s)" >> $GITHUB_ENV
+          JOB_ID=matrix-${{ matrix.value }}
+          echo "JOB_ID=${JOB_ID}" >> $GITHUB_ENV
+          echo "JOB_START=$(date +%s)" >> $GITHUB_ENV
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
+          buildevents cmd $TRACE_ID $JOB_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
-          buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
-      - run: |
-          buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
+          buildevents cmd $TRACE_ID $JOB_ID sleep -- sleep 2
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
+          printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
+          buildevents step $TRACE_ID $JOB_ID $JOB_START $JOB_ID
 
   end-trace:
     name: End Trace
     runs-on: ubuntu-latest
     permissions:
-      actions: read
       contents: read
     needs: [smoke-test-no-init-event, matrix]
     if: ${{ always() }}
     steps:
       - uses: actions/checkout@v6
-      - uses: technote-space/workflow-conclusion-action@v3
       - name: Buildevents
         uses: ./
         with:
@@ -103,6 +107,6 @@ jobs:
           dataset: gha-buildevents_integration
           # Required: the job status, this will be used in the post section and sent
           #           as status of the trace. Must always be ${{ job.status }}.
-          status: ${{ env.WORKFLOW_CONCLUSION }}
+          status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'cancelled') && 'cancelled' || 'success' }}
           trace-start: ${{ needs.smoke-test-no-init-event.outputs.trace-start}}
           send-init-event: false

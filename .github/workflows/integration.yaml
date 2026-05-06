@@ -44,7 +44,9 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
-      - run: |
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
     outputs:
@@ -80,7 +82,9 @@ jobs:
       - shell: pwsh
         run: |
           buildevents cmd $env:TRACE_ID $env:STEP_ID 'sleep some more' --shell powershell.exe -- "Start-Sleep -Seconds 2"
-      - shell: pwsh
+      - name: Send parent span for job
+        if: ${{ always() }}
+        shell: pwsh
         run: |
           "`njob.status=${{ job.status }}" | Out-File -Append -NoNewline -Encoding utf8 $env:BUILDEVENT_FILE
           buildevents step $env:TRACE_ID $env:STEP_ID $env:STEP_START $env:STEP_ID
@@ -113,7 +117,9 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
-      - run: |
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 

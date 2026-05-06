@@ -32,7 +32,7 @@ jobs:
         run: buildevents cmd $TRACE_ID "$STEP_ID" sleep -- sleep 1
       - name: Expected Failure
         run: ./.github/scripts/test-be-failure
-      - name: Send parent span for these steps
+      - name: Send parent span for job
         if: always()
         run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE

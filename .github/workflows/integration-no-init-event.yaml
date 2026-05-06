@@ -45,7 +45,9 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 5
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID 'sleep some more' -- sleep 2
-      - run: |
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
     outputs:
@@ -80,7 +82,9 @@ jobs:
           buildevents cmd $TRACE_ID $STEP_ID ${{ matrix.value }} -- echo The matrix value is ${{ matrix.value }}
       - run: |
           buildevents cmd $TRACE_ID $STEP_ID sleep -- sleep 2
-      - run: |
+      - name: Send parent span for job
+        if: ${{ always() }}
+        run: |
           printf "\njob.status=${{ job.status }}" >> $BUILDEVENT_FILE
           buildevents step $TRACE_ID $STEP_ID $STEP_START $STEP_ID
 

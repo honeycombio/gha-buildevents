@@ -20,7 +20,7 @@ jobs:
     outputs:
       trace-start: ${{ steps.set-trace-start.outputs.trace-start }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set trace-start
         id: set-trace-start
@@ -50,7 +50,7 @@ jobs:
       contents: read
     needs: [otel-traceid]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Buildevents End Trace with otel-traceid
         uses: ./
         with:

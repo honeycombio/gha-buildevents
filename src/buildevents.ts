@@ -7,13 +7,32 @@ import * as tc from '@actions/tool-cache'
 import * as logfmt from 'logfmt'
 import * as util from './util.js'
 
+// tc.downloadTool only retries 3 times over ~30s, which is shorter than the GitHub
+// release-asset outages we see (504s lasting a few minutes). Retry the whole download
+// with exponential backoff: waits of 20s, 40s and 80s between 4 attempts.
+const DOWNLOAD_ATTEMPTS = 4
+const DOWNLOAD_BACKOFF_SECONDS = 20
+
+async function downloadWithRetry(url: string): Promise<string> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await tc.downloadTool(url)
+    } catch (err) {
+      if (attempt >= DOWNLOAD_ATTEMPTS) throw err
+      const wait = DOWNLOAD_BACKOFF_SECONDS * 2 ** (attempt - 1)
+      core.warning(`Download attempt ${attempt}/${DOWNLOAD_ATTEMPTS} failed: ${err}. Retrying in ${wait} seconds`)
+      await new Promise(resolve => setTimeout(resolve, wait * 1000))
+    }
+  }
+}
+
 export async function install(apikey: string, apihost: string, dataset: string): Promise<void> {
   core.info('Downloading and installing buildevents')
 
   const url = 'https://github.com/honeycombio/buildevents/releases/latest/download/' + util.constructExecutableName()
   core.info(`Downloading from ${url}`)
 
-  const downloadPath = await tc.downloadTool(url)
+  const downloadPath = await downloadWithRetry(url)
 
   // rename downloaded binary - downloadPath is similar to a UUID by default
   const exeName = process.platform === 'win32' ? 'buildevents.exe' : 'buildevents'
